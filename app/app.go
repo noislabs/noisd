@@ -339,6 +339,7 @@ func NewNoisApp(
 	}
 	availableCapabilities := "iterator,staking,stargate,stargaze,cosmwasm_1_1"
 
+	wasmOpts = append(wasmOpts, NoisGasRegisterOption())
 	app.WasmKeeper = wasm.NewKeeper(
 		appCodec,
 		keys[wasm.StoreKey],

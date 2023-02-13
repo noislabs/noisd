@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/CosmWasm/wasmd/x/wasm"
+	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 )
 
 var (
@@ -39,4 +40,15 @@ func GetWasmEnabledProposals() []wasm.ProposalType {
 	}
 
 	return proposals
+}
+
+// NoisGasRegister creates instance with default values
+func NoisGasRegister() wasmkeeper.WasmGasRegister {
+	register := wasmkeeper.DefaultGasRegisterConfig()
+	register.CompileCost = 1
+	return wasmkeeper.NewWasmGasRegister(register)
+}
+
+func NoisGasRegisterOption() wasm.Option {
+	return wasmkeeper.WithGasRegister(NoisGasRegister())
 }
