@@ -17,6 +17,7 @@ type WasmConfig struct {
 // CustomAppConfig defines the configuration for the Nois app.
 type CustomAppConfig struct {
 	serverconfig.Config
+	WASM WasmConfig `mapstructure:"wasm"`
 }
 
 const customAppTemplate = `
@@ -34,4 +35,19 @@ memory_cache_size=512
 
 func CustomConfigTempalte() string {
 	return serverconfig.DefaultConfigTemplate + customAppTemplate
+}
+
+func DefaultConfig() (string, interface{}) {
+	serverConfig := serverconfig.DefaultConfig()
+	serverConfig.MinGasPrices = "0.05unois"
+	customConfig := CustomAppConfig{
+		Config: *serverConfig,
+		WASM: WasmConfig{
+			SimulationGasLimit: 50000000,
+			QueryGasLimit:      50000000,
+			MemoryCacheSize:    512,
+		},
+	}
+	return CustomConfigTempalte(), customConfig
+
 }

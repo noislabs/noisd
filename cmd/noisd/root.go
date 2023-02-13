@@ -82,8 +82,8 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 			if err := client.SetCmdClientContextHandler(initClientCtx, cmd); err != nil {
 				return err
 			}
-
-			return server.InterceptConfigsPreRunHandler(cmd, "", nil)
+			customTemplate, customParams := params.DefaultConfig()
+			return server.InterceptConfigsPreRunHandler(cmd, customTemplate, customParams)
 		},
 	}
 
