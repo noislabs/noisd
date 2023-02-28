@@ -114,7 +114,7 @@ func InitCmd(mbm module.BasicManager, defaultNodeHome string) *cobra.Command {
 			config.Consensus.TimeoutPrevote = 1 * time.Second
 			config.Consensus.TimeoutPrecommit = 1 * time.Second
 			config.Consensus.TimeoutPrecommitDelta = 500 * time.Millisecond
-			config.Consensus.TimeoutCommit = 1800 * time.Millisecond
+			config.Consensus.TimeoutCommit = 1750 * time.Millisecond
 			genFile := config.GenesisFile()
 			overwrite, _ := cmd.Flags().GetBool(FlagOverwrite)
 
