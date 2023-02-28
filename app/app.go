@@ -3,7 +3,6 @@ package app
 import (
 	"fmt"
 	"io"
-
 	"os"
 	"path/filepath"
 
@@ -96,10 +95,8 @@ import (
 
 const appName = "NoisApp"
 
-var (
-	// DefaultNodeHome default home directories for the application daemon
-	DefaultNodeHome string
-)
+// DefaultNodeHome default home directories for the application daemon
+var DefaultNodeHome string
 
 // init sets DefaultNodeHome to default noisd install location.
 func init() {
@@ -111,9 +108,7 @@ func init() {
 	DefaultNodeHome = filepath.Join(userHomeDir, ".noisd")
 }
 
-var (
-	_ servertypes.Application = (*NoisApp)(nil)
-)
+var _ servertypes.Application = (*NoisApp)(nil)
 
 type NoisApp struct {
 	// extend from base app
@@ -687,7 +682,6 @@ func (app *NoisApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APICo
 	// Register legacy and grpc-gateway routes for all modules.
 	ModuleBasics.RegisterRESTRoutes(clientCtx, apiSvr.Router)
 	ModuleBasics.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
-
 }
 
 // RegisterTxService implements the Application.RegisterTxService method.

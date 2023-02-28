@@ -49,5 +49,4 @@ func DefaultConfig() (string, interface{}) {
 		},
 	}
 	return CustomConfigTempalte(), customConfig
-
 }
