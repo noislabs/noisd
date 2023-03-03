@@ -84,8 +84,8 @@ endif
 
 check_version:
 	@echo "Go version: $(GO_MAJOR_VERSION).$(GO_MINOR_VERSION)"
-ifneq ($(GO_MINOR_VERSION),19)
-	@echo "ERROR: Go version 1.19 is required for this version of Nois"
+ifneq ($(GO_MINOR_VERSION),20)
+	@echo "ERROR: Go version 1.20 is required for this version of Nois"
 	exit 1
 endif
 
@@ -111,7 +111,7 @@ lint:
 full-lint: lint
 	@gosec -exclude-dir=cmd ./...
 
-build-linux: 
+build-linux:
 	CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build $(BUILD_FLAGS) -o build/noisd github.com/noislabs/noisd/cmd/noisd
 
 test:
