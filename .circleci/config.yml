@@ -9,6 +9,14 @@ jobs:
       - run:
           name: Build
           command: make build
+      - run:
+          name: Check libwasmvm version
+          command: |
+            LIBWASMVM_VERSION=$(./build/noisd query wasm libwasmvm-version)
+            if [[ "$LIBWASMVM_VERSION" != "1.2.0" ]] ; then
+              echo "Got unexpected libwasmvm version: $LIBWASMVM_VERSION"
+              exit 1
+            fi
   tidy:
     docker:
       - image: cimg/go:1.20.1
