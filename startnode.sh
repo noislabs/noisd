@@ -5,7 +5,6 @@ command -v shellcheck >/dev/null && shellcheck "$0"
 # Use GNU version (Linux version) on Mac too. Otherwise the -i argument is incompatible.
 gnused="$(command -v gsed || echo sed)"
 
-#make install
 
 # Create key under nickname "validator" first:
 # noisd keys add validator
@@ -14,7 +13,7 @@ VALIDATOR_ADDR=$(noisd keys show validator -a)
 # rm -rf $HOME/.noisd
 rm -rf ~/.noisd/config/gentx
 # setup chain
-noisd init stargaze --chain-id localnet-1 --overwrite
+noisd init nois --chain-id localnet-1 --overwrite
 "$gnused" -i 's/stake/unois/' ~/.noisd/config/genesis.json
 
 
