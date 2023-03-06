@@ -3,8 +3,8 @@
 #   on ARM:   docker build . -t noislabs/noisd:manual --build-arg arch=aarch64
 #
 # Run
-#   show version:       docker run --rm -it noislabs/noisd:manual
-#   libwasmvm version:  docker run --rm -it noislabs/noisd:manual /usr/bin/noisd query wasm libwasmvm-version
+#   show version:       docker run --rm noislabs/noisd:manual
+#   libwasmvm version:  docker run --rm noislabs/noisd:manual /usr/bin/noisd query wasm libwasmvm-version
 #   shell:              docker run --rm -it noislabs/noisd:manual /bin/sh
 FROM golang:1.20.1-alpine3.17 AS go-builder
 ARG arch=x86_64
