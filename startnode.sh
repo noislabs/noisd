@@ -13,7 +13,7 @@ VALIDATOR_ADDR=$(noisd keys show validator -a)
 # rm -rf $HOME/.noisd
 rm -rf ~/.noisd/config/gentx
 # setup chain
-noisd init nois --chain-id localnet-1 --overwrite
+noisd init local-validator-001 --chain-id localnet-1 --overwrite
 "$gnused" -i 's/stake/unois/' ~/.noisd/config/genesis.json
 
 
