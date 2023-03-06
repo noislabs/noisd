@@ -1,6 +1,6 @@
 # Build image
-#   on Intel: docker build . -t noislabs/noisd:manual
-#   on ARM:   docker build . -t noislabs/noisd:manual --build-arg arch=aarch64
+#   on Intel: docker build --target noisd -t noislabs/noisd:manual .
+#   on ARM:   docker build --target noisd -t noislabs/noisd:manual --build-arg arch=aarch64 .
 #
 # Run
 #   show version:       docker run --rm noislabs/noisd:manual
@@ -35,7 +35,7 @@ RUN echo "Ensuring binary is statically linked ..." \
   && (file /code/build/noisd | grep "statically linked")
 
 # --------------------------------------------------------
-FROM alpine:3.17
+FROM alpine:3.17 as noisd
 
 COPY --from=go-builder /code/build/noisd /usr/bin/noisd
 
@@ -52,3 +52,16 @@ EXPOSE 26656
 EXPOSE 26657
 
 CMD ["/usr/bin/noisd", "version"]
+
+FROM noisd as noisd-ci
+
+# USER root
+
+RUN apk add jq
+
+WORKDIR /opt
+
+COPY docker/scripts-ci/* /opt
+RUN chmod +x /opt/*.sh
+
+CMD [ "/opt/run.sh" ]
