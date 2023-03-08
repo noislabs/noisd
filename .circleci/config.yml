@@ -68,7 +68,6 @@ jobs:
           name: Run Docker image
           command: |
             docker run --rm "noislabs/noisd:${CIRCLE_SHA1}"
-            docker run --rm "noislabs/noisd-ci:${CIRCLE_SHA1}"
       - run:
           name: Ensure libwasmvm version is correct
           command: |
