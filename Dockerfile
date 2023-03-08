@@ -63,3 +63,7 @@ COPY docker/scripts-ci/* /opt
 RUN chmod +x /opt/*.sh
 
 CMD [ "/opt/run.sh" ]
+
+FROM noisd as default-target
+
+RUN echo "Please specify a Docker target using '--target noisd' or '--target noisd-ci'"; exit 1
