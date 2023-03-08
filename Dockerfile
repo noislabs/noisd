@@ -44,8 +44,6 @@ COPY --from=go-builder /code/build/noisd /usr/bin/noisd
 
 WORKDIR /opt
 
-# rest server
-EXPOSE 1317
 # tendermint p2p
 EXPOSE 26656
 # tendermint rpc
