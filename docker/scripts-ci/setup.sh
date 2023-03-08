@@ -7,7 +7,6 @@ CHAIN_ID=${CHAIN_ID:-nois-testing}
 MONIKER=${MONIKER:-nois-moniker}
 
 TOKEN=${TOKEN:-unois}
-TRANSFER_PORT=${TRANSFER_PORT:-transfer}
 
 # both types of tokens
 START_BALANCE="1000000000$TOKEN"
@@ -18,7 +17,6 @@ noisd init --chain-id "$CHAIN_ID" "$MONIKER"
 cd "${HOME}/.noisd"
 
 sed -i "s/\"stake\"/\"$TOKEN\"/" config/genesis.json # staking/governance token is hardcoded in config, change this
-sed -i "s/\"port_id\": *\"transfer\"/\"port_id\": \"$TRANSFER_PORT\"/" config/genesis.json # allow custom ibc transfer port
 
 # this is essential for sub-1s block times (or header times go crazy)
 sed -i 's/"time_iota_ms": "1000"/"time_iota_ms": "10"/' config/genesis.json
