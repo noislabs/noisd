@@ -71,10 +71,3 @@ sed -i"" \
   -e 's/^timeout_precommit_delta =.*$/timeout_precommit_delta = "100ms"/' \
   -e 's/^timeout_commit =.*$/timeout_commit = "200ms"/' \
   "config/config.toml"
-
-# Custom settings app.toml
-sed -i"" \
-  -e 's/^enable =.*$/enable = true/' \
-  -e 's/^enabled-unsafe-cors =.*$/enabled-unsafe-cors = true/' \
-  -e 's/^minimum-gas-prices = \".*\"/minimum-gas-prices = \"0.025unois\"/' \
-  "config/app.toml"
