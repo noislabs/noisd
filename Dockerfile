@@ -59,7 +59,7 @@ RUN apk add jq
 
 WORKDIR /opt
 
-COPY docker/scripts-ci/* /opt
+COPY docker/scripts-ci/* /opt/
 RUN chmod +x /opt/*.sh
 
 CMD [ "/opt/run.sh" ]
