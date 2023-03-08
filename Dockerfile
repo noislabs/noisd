@@ -1,13 +1,16 @@
 # Build image
-#   on Intel: docker build --target noisd -t noislabs/noisd:manual .
-#   on ARM:   docker build --target noisd -t noislabs/noisd:manual --build-arg arch=aarch64 .
+#   on Intel: docker build --target noisd --tag noislabs/noisd:manual .
+#   on ARM:   docker build --target noisd --tag noislabs/noisd:manual .
+#
+# Cross-build multi-arch image for Intel+ARM
+#   Build only:   docker buildx build --target noisd --platform linux/arm64/v8,linux/amd64 --pull --tag noislabs/noisd:manual .
+#   Publish:      docker buildx build --target noisd --platform linux/arm64/v8,linux/amd64 --pull --tag noislabs/noisd:0.0.0-lfg.1 . --push
 #
 # Run
 #   show version:       docker run --rm noislabs/noisd:manual
-#   libwasmvm version:  docker run --rm noislabs/noisd:manual /usr/bin/noisd query wasm libwasmvm-version
-#   shell:              docker run --rm -it noislabs/noisd:manual /bin/sh
+#   libwasmvm version:  docker run --rm noislabs/noisd:manual noisd query wasm libwasmvm-version
+#   shell:              docker run --rm -it noislabs/noisd:manual sh
 FROM golang:1.20.1-alpine3.17 AS go-builder
-ARG arch=x86_64
 
 # this comes from standard alpine nightly file
 #  https://github.com/rust-lang/docker-rust-nightly/blob/master/alpine3.12/Dockerfile
@@ -27,7 +30,13 @@ RUN sha256sum /lib/libwasmvm_muslc.aarch64.a | grep 86bc5fdc0f01201481c36e17cd3d
 RUN sha256sum /lib/libwasmvm_muslc.x86_64.a | grep a00700aa19f5bfe0f46290ddf69bf51eb03a6dfcd88b905e1081af2e42dbbafc
 
 # Copy the library you want to the final location that will be found by the linker flag `-lwasmvm_muslc`
-RUN cp /lib/libwasmvm_muslc.${arch}.a /lib/libwasmvm_muslc.a
+RUN APK_ARCH="$(apk --print-arch)"; \
+  echo "Detected architecture: $APK_ARCH"; \
+  case "$APK_ARCH" in \
+    aarch64) export LIB_PATH='/lib/libwasmvm_muslc.aarch64.a' ;; \
+    x86_64)  export LIB_PATH='/lib/libwasmvm_muslc.x86_64.a' ;; \
+  esac; \
+  cp "$LIB_PATH" /lib/libwasmvm_muslc.a
 
 # force it to use static lib (from above) not standard libgo_cosmwasm.so file
 RUN LEDGER_ENABLED=false BUILD_TAGS=muslc LINK_STATICALLY=true make build
