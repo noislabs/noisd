@@ -21,22 +21,19 @@ RUN apk add git
 # NOTE: add these to run with LEDGER_ENABLED=true
 # RUN apk add libusb-dev linux-headers
 
-WORKDIR /code
-COPY . /code/
 # See https://github.com/CosmWasm/wasmvm/releases
-ADD https://github.com/CosmWasm/wasmvm/releases/download/v1.2.1/libwasmvm_muslc.aarch64.a /lib/libwasmvm_muslc.aarch64.a
-ADD https://github.com/CosmWasm/wasmvm/releases/download/v1.2.1/libwasmvm_muslc.x86_64.a /lib/libwasmvm_muslc.x86_64.a
-RUN sha256sum /lib/libwasmvm_muslc.aarch64.a | grep 86bc5fdc0f01201481c36e17cd3dfed6e9650d22e1c5c8983a5b78c231789ee0
-RUN sha256sum /lib/libwasmvm_muslc.x86_64.a | grep a00700aa19f5bfe0f46290ddf69bf51eb03a6dfcd88b905e1081af2e42dbbafc
-
 # Copy the library you want to the final location that will be found by the linker flag `-lwasmvm_muslc`
 RUN APK_ARCH="$(apk --print-arch)"; \
   echo "Detected architecture: $APK_ARCH"; \
   case "$APK_ARCH" in \
-    aarch64) export LIB_PATH='/lib/libwasmvm_muslc.aarch64.a' ;; \
-    x86_64)  export LIB_PATH='/lib/libwasmvm_muslc.x86_64.a' ;; \
-  esac; \
-  cp "$LIB_PATH" /lib/libwasmvm_muslc.a
+    aarch64) wget -O - https://github.com/CosmWasm/wasmvm/releases/download/v1.2.1/libwasmvm_muslc.aarch64.a \
+        | tee /lib/libwasmvm_muslc.a | sha256sum | grep 86bc5fdc0f01201481c36e17cd3dfed6e9650d22e1c5c8983a5b78c231789ee0 ;; \
+    x86_64)  wget -O - https://github.com/CosmWasm/wasmvm/releases/download/v1.2.1/libwasmvm_muslc.x86_64.a \
+        | tee /lib/libwasmvm_muslc.a | sha256sum | grep a00700aa19f5bfe0f46290ddf69bf51eb03a6dfcd88b905e1081af2e42dbbafc ;; \
+  esac;
+
+WORKDIR /code
+COPY . /code/
 
 # force it to use static lib (from above) not standard libgo_cosmwasm.so file
 RUN LEDGER_ENABLED=false BUILD_TAGS=muslc LINK_STATICALLY=true make build
