@@ -1,10 +1,10 @@
 # Build image
-#   on Intel: docker build --target noisd --tag noislabs/noisd:manual .
-#   on ARM:   docker build --target noisd --tag noislabs/noisd:manual .
+#   on Intel: docker build --tag noislabs/noisd:manual .
+#   on ARM:   docker build --tag noislabs/noisd:manual .
 #
 # Cross-build multi-arch image for Intel+ARM
-#   Build only:   docker buildx build --target noisd --platform linux/arm64/v8,linux/amd64 --pull --tag noislabs/noisd:manual .
-#   Publish:      docker buildx build --target noisd --platform linux/arm64/v8,linux/amd64 --pull --tag noislabs/noisd:0.0.0-lfg.1 . --push
+#   Build only:   docker buildx build --platform linux/arm64/v8,linux/amd64 --pull --tag noislabs/noisd:manual .
+#   Publish:      docker buildx build --platform linux/arm64/v8,linux/amd64 --pull --tag noislabs/noisd:0.0.0-lfg.1 . --push
 #
 # Run
 #   show version:       docker run --rm noislabs/noisd:manual
@@ -48,8 +48,11 @@ FROM alpine:3.17 as noisd
 
 COPY --from=go-builder /code/build/noisd /usr/bin/noisd
 
-# COPY docker/* /opt/
-# RUN chmod +x /opt/*.sh
+# jq is required in the setup script at runtime
+RUN apk add jq
+
+COPY docker/scripts/* /usr/local/bin/
+RUN chmod +x /usr/local/bin/*.sh
 
 WORKDIR /opt
 
@@ -59,20 +62,3 @@ EXPOSE 26656
 EXPOSE 26657
 
 CMD ["/usr/bin/noisd", "version"]
-
-FROM noisd as noisd-ci
-
-# USER root
-
-RUN apk add jq
-
-WORKDIR /opt
-
-COPY docker/scripts-ci/* /opt/
-RUN chmod +x /opt/*.sh
-
-CMD [ "/opt/run.sh" ]
-
-FROM noisd as default-target
-
-RUN echo "Please specify a Docker target using '--target noisd' or '--target noisd-ci'"; exit 1
