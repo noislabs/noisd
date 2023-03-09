@@ -60,10 +60,9 @@ jobs:
           version: 20.10.14
           docker_layer_caching: true
       - run:
-          name: Build Docker images
+          name: Build Docker image
           command: |
-            docker build --pull -t "noislabs/noisd:${CIRCLE_SHA1}" --target noisd .
-            docker build --pull -t "noislabs/noisd-ci:${CIRCLE_SHA1}" --target noisd-ci .
+            docker build --pull -t "noislabs/noisd:${CIRCLE_SHA1}" .
       - run:
           name: Run Docker image
           command: |
