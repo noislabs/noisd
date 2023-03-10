@@ -7,6 +7,7 @@
 - [nois/allocation/v1/params.proto](#nois/allocation/v1/params.proto)
     - [DistributionProportions](#noislabs.nois.allocation.v1.DistributionProportions)
     - [Params](#noislabs.nois.allocation.v1.Params)
+    - [ValidatorAccumulatedRewards](#noislabs.nois.allocation.v1.ValidatorAccumulatedRewards)
     - [WeightedAddress](#noislabs.nois.allocation.v1.WeightedAddress)
   
 - [nois/allocation/v1/genesis.proto](#nois/allocation/v1/genesis.proto)
@@ -19,6 +20,9 @@
     - [Query](#noislabs.nois.allocation.v1.Query)
   
 - [nois/allocation/v1/tx.proto](#nois/allocation/v1/tx.proto)
+    - [MsgClaimRewards](#noislabs.nois.allocation.v1.MsgClaimRewards)
+    - [MsgClaimRewardsResponse](#noislabs.nois.allocation.v1.MsgClaimRewardsResponse)
+  
     - [Msg](#noislabs.nois.allocation.v1.Msg)
   
 - [Scalar Value Types](#scalar-value-types)
@@ -60,6 +64,21 @@
 | `distribution_proportions` | [DistributionProportions](#noislabs.nois.allocation.v1.DistributionProportions) |  | distribution_proportions defines the proportion of the minted denom |
 | `weighted_developer_rewards_receivers` | [WeightedAddress](#noislabs.nois.allocation.v1.WeightedAddress) | repeated | address to receive developer rewards |
 | `randomness_rewards_receiver` | [string](#string) |  | address to receive randomness rewards |
+
+
+
+
+
+
+<a name="noislabs.nois.allocation.v1.ValidatorAccumulatedRewards"></a>
+
+### ValidatorAccumulatedRewards
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `rewards` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) | repeated | accumulated validator rewards |
 
 
 
@@ -179,6 +198,36 @@ Query defines the gRPC querier service.
 ## nois/allocation/v1/tx.proto
 
 
+
+<a name="noislabs.nois.allocation.v1.MsgClaimRewards"></a>
+
+### MsgClaimRewards
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `sender` | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="noislabs.nois.allocation.v1.MsgClaimRewardsResponse"></a>
+
+### MsgClaimRewardsResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `claimed_rewards` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) | repeated | claimed rewards amount |
+
+
+
+
+
  <!-- end messages -->
 
  <!-- end enums -->
@@ -193,6 +242,7 @@ Msg defines the allocation Msg service.
 
 | Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
 | ----------- | ------------ | ------------- | ------------| ------- | -------- |
+| `ClaimRewards` | [MsgClaimRewards](#noislabs.nois.allocation.v1.MsgClaimRewards) | [MsgClaimRewardsResponse](#noislabs.nois.allocation.v1.MsgClaimRewardsResponse) |  | |
 
  <!-- end services -->
 
