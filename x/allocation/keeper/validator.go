@@ -21,6 +21,6 @@ func (k Keeper) GetValidatorRewards(ctx sdk.Context, operator sdk.AccAddress) ty
 	}
 	bz := prefixStore.Get(operator)
 	rewards := types.ValidatorAccumulatedRewards{}
-	 k.cdc.MustUnmarshal(bz, &rewards)
+	k.cdc.MustUnmarshal(bz, &rewards)
 	return rewards
 }
