@@ -338,7 +338,7 @@ func NewNoisApp(
 	if err != nil {
 		panic(fmt.Sprintf("error while reading wasm config: %s", err))
 	}
-	availableCapabilities := "iterator,staking,stargate,stargaze,cosmwasm_1_1"
+	availableCapabilities := "iterator,staking,stargate,cosmwasm_1_1,cosmwasm_1_2"
 
 	wasmOpts = append(wasmOpts, NoisGasRegisterOption())
 	app.WasmKeeper = wasm.NewKeeper(
