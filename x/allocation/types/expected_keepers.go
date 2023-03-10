@@ -3,6 +3,7 @@ package types
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 type AccountKeeper interface {
@@ -31,4 +32,6 @@ type BankKeeper interface {
 type StakingKeeper interface {
 	// BondDenom - Bondable coin denomination
 	BondDenom(sdk.Context) string
+	// Get the list of bonded validators
+	GetLastValidators(ctx sdk.Context) (validators []stakingtypes.Validator)
 }

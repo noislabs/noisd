@@ -10,6 +10,8 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/noislabs/noisd/x/allocation/types"
+
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 type Keeper struct {
@@ -54,12 +56,34 @@ func (k Keeper) DistributeInflation(ctx sdk.Context) error {
 	params := k.GetParams(ctx)
 	proportions := params.DistributionProportions
 
+	// fund randomness rewards address
 	randomnessRewardsCoin := k.GetProportions(ctx, blockInflation, proportions.RandomnessRewards)
 	randomnessRewardsReceiver, err := sdk.AccAddressFromBech32(params.RandomnessRewardsReceiver)
 	if err != nil {
 		return err
 	}
 	k.bankKeeper.SendCoinsFromModuleToAccount(ctx, authtypes.FeeCollectorName, randomnessRewardsReceiver, sdk.NewCoins(randomnessRewardsCoin))
+
+	// fund validator rewards pool
+	validatorRewardsCoins := k.GetProportions(ctx, blockInflation, proportions.ValidatorRewards)
+	k.bankKeeper.SendCoinsFromModuleToModule(ctx, authtypes.FeeCollectorName, types.ValidatorRewardsPool, sdk.NewCoins(validatorRewardsCoins))
+
+	return nil
+}
+
+func (k Keeper) DistributeValidatorRewards(ctx sdk.Context) error {
+	validators := k.stakingKeeper.GetLastValidators(ctx)
+	validValidators := make([]stakingtypes.Validator, 0)
+	for _, validator := range validators {
+		// skip jailed and not bonded
+		if validator.Jailed || validator.Status != stakingtypes.Bonded {
+			continue
+		}
+		// TODO: retrieve self-delegation
+		validValidators = append(validValidators, validator)
+	}
+	// TODO:  accumulate rewards
+	fmt.Println(validValidators)
 	return nil
 }
 

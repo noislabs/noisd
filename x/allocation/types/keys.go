@@ -12,6 +12,8 @@ const (
 
 	// QuerierRoute defines the module's query routing key
 	QuerierRoute = ModuleName
+
+	ValidatorRewardsPool = "validator_rewards_pool"
 )
 
 var ValidatorRewardsPrefix = []byte{0x01}
