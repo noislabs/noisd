@@ -77,7 +77,7 @@ func validateDistributionProportions(i interface{}) error {
 	}
 
 	if v.ValidatorRewards.IsNegative() {
-		return errors.New("NFT incentives distribution ratio should not be negative")
+		return errors.New("validator rewards distribution ratio should not be negative")
 	}
 
 	if v.DeveloperRewards.IsNegative() {
@@ -85,10 +85,10 @@ func validateDistributionProportions(i interface{}) error {
 	}
 
 	if v.RandomnessRewards.IsNegative() {
-		return errors.New("developer rewards distribution ratio should not be negative")
+		return errors.New("randomness rewards distribution ratio should not be negative")
 	}
 
-	totalProportions := v.DeveloperRewards.Add(v.DeveloperRewards).Add(v.RandomnessRewards)
+	totalProportions := v.ValidatorRewards.Add(v.DeveloperRewards).Add(v.RandomnessRewards)
 
 	if !totalProportions.Equal(sdk.NewDecWithPrec(30, 2)) {
 		return errors.New("total distributions ratio should be 30%")
