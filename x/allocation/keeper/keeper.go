@@ -46,6 +46,7 @@ func NewKeeper(
 
 // DistributeInflation distributes module-specific inflation
 func (k Keeper) DistributeInflation(ctx sdk.Context) error {
+	// Fee collector module account account contains newly minted coins and collected fees from transactions
 	blockInflationAddr := k.accountKeeper.GetModuleAccount(ctx, authtypes.FeeCollectorName).GetAddress()
 	blockInflation := k.bankKeeper.GetBalance(ctx, blockInflationAddr, k.stakingKeeper.BondDenom(ctx))
 
@@ -55,19 +56,20 @@ func (k Keeper) DistributeInflation(ctx sdk.Context) error {
 	}
 	params := k.GetParams(ctx)
 	proportions := params.DistributionProportions
-
 	// fund randomness rewards address
 	randomnessRewardsCoin := k.GetProportions(ctx, blockInflation, proportions.RandomnessRewards)
 	randomnessRewardsReceiver, err := sdk.AccAddressFromBech32(params.RandomnessRewardsReceiver)
 	if err != nil {
 		return err
 	}
-	k.bankKeeper.SendCoinsFromModuleToAccount(ctx, authtypes.FeeCollectorName, randomnessRewardsReceiver, sdk.NewCoins(randomnessRewardsCoin))
-
+	if !randomnessRewardsCoin.IsZero() {
+		k.bankKeeper.SendCoinsFromModuleToAccount(ctx, authtypes.FeeCollectorName, randomnessRewardsReceiver, sdk.NewCoins(randomnessRewardsCoin))
+	}
 	// fund validator rewards pool
 	validatorRewardsCoins := k.GetProportions(ctx, blockInflation, proportions.ValidatorRewards)
-	k.bankKeeper.SendCoinsFromModuleToModule(ctx, authtypes.FeeCollectorName, types.ValidatorRewardsPool, sdk.NewCoins(validatorRewardsCoins))
-
+	if !validatorRewardsCoins.IsZero() {
+		k.bankKeeper.SendCoinsFromModuleToModule(ctx, authtypes.FeeCollectorName, types.ValidatorRewardsPool, sdk.NewCoins(validatorRewardsCoins))
+	}
 	return nil
 }
 
