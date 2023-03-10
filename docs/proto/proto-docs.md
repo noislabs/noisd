@@ -5,25 +5,25 @@
 ## Table of Contents
 
 - [nois/allocation/v1/params.proto](#nois/allocation/v1/params.proto)
-    - [DistributionProportions](#noislabs.nois.allocation.v1.DistributionProportions)
-    - [Params](#noislabs.nois.allocation.v1.Params)
-    - [ValidatorAccumulatedRewards](#noislabs.nois.allocation.v1.ValidatorAccumulatedRewards)
-    - [WeightedAddress](#noislabs.nois.allocation.v1.WeightedAddress)
+    - [DistributionProportions](#nois.allocation.v1.DistributionProportions)
+    - [Params](#nois.allocation.v1.Params)
+    - [ValidatorAccumulatedRewards](#nois.allocation.v1.ValidatorAccumulatedRewards)
+    - [WeightedAddress](#nois.allocation.v1.WeightedAddress)
   
 - [nois/allocation/v1/genesis.proto](#nois/allocation/v1/genesis.proto)
-    - [GenesisState](#noislabs.nois.allocation.v1.GenesisState)
+    - [GenesisState](#nois.allocation.v1.GenesisState)
   
 - [nois/allocation/v1/query.proto](#nois/allocation/v1/query.proto)
-    - [QueryParamsRequest](#noislabs.nois.allocation.v1.QueryParamsRequest)
-    - [QueryParamsResponse](#noislabs.nois.allocation.v1.QueryParamsResponse)
+    - [QueryParamsRequest](#nois.allocation.v1.QueryParamsRequest)
+    - [QueryParamsResponse](#nois.allocation.v1.QueryParamsResponse)
   
-    - [Query](#noislabs.nois.allocation.v1.Query)
+    - [Query](#nois.allocation.v1.Query)
   
 - [nois/allocation/v1/tx.proto](#nois/allocation/v1/tx.proto)
-    - [MsgClaimRewards](#noislabs.nois.allocation.v1.MsgClaimRewards)
-    - [MsgClaimRewardsResponse](#noislabs.nois.allocation.v1.MsgClaimRewardsResponse)
+    - [MsgClaimRewards](#nois.allocation.v1.MsgClaimRewards)
+    - [MsgClaimRewardsResponse](#nois.allocation.v1.MsgClaimRewardsResponse)
   
-    - [Msg](#noislabs.nois.allocation.v1.Msg)
+    - [Msg](#nois.allocation.v1.Msg)
   
 - [Scalar Value Types](#scalar-value-types)
 
@@ -36,7 +36,7 @@
 
 
 
-<a name="noislabs.nois.allocation.v1.DistributionProportions"></a>
+<a name="nois.allocation.v1.DistributionProportions"></a>
 
 ### DistributionProportions
 
@@ -53,7 +53,7 @@
 
 
 
-<a name="noislabs.nois.allocation.v1.Params"></a>
+<a name="nois.allocation.v1.Params"></a>
 
 ### Params
 
@@ -61,8 +61,8 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| `distribution_proportions` | [DistributionProportions](#noislabs.nois.allocation.v1.DistributionProportions) |  | distribution_proportions defines the proportion of the minted denom |
-| `weighted_developer_rewards_receivers` | [WeightedAddress](#noislabs.nois.allocation.v1.WeightedAddress) | repeated | address to receive developer rewards |
+| `distribution_proportions` | [DistributionProportions](#nois.allocation.v1.DistributionProportions) |  | distribution_proportions defines the proportion of the minted denom |
+| `weighted_developer_rewards_receivers` | [WeightedAddress](#nois.allocation.v1.WeightedAddress) | repeated | address to receive developer rewards |
 | `randomness_rewards_receiver` | [string](#string) |  | address to receive randomness rewards |
 
 
@@ -70,7 +70,7 @@
 
 
 
-<a name="noislabs.nois.allocation.v1.ValidatorAccumulatedRewards"></a>
+<a name="nois.allocation.v1.ValidatorAccumulatedRewards"></a>
 
 ### ValidatorAccumulatedRewards
 
@@ -85,7 +85,7 @@
 
 
 
-<a name="noislabs.nois.allocation.v1.WeightedAddress"></a>
+<a name="nois.allocation.v1.WeightedAddress"></a>
 
 ### WeightedAddress
 
@@ -117,7 +117,7 @@
 
 
 
-<a name="noislabs.nois.allocation.v1.GenesisState"></a>
+<a name="nois.allocation.v1.GenesisState"></a>
 
 ### GenesisState
 GenesisState defines the allocation module's genesis state.
@@ -125,7 +125,7 @@ GenesisState defines the allocation module's genesis state.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| `params` | [Params](#noislabs.nois.allocation.v1.Params) |  |  |
+| `params` | [Params](#nois.allocation.v1.Params) |  |  |
 
 
 
@@ -148,7 +148,7 @@ GenesisState defines the allocation module's genesis state.
 
 
 
-<a name="noislabs.nois.allocation.v1.QueryParamsRequest"></a>
+<a name="nois.allocation.v1.QueryParamsRequest"></a>
 
 ### QueryParamsRequest
 QueryParamsRequest is the request type for the Query/Params RPC method.
@@ -158,7 +158,7 @@ QueryParamsRequest is the request type for the Query/Params RPC method.
 
 
 
-<a name="noislabs.nois.allocation.v1.QueryParamsResponse"></a>
+<a name="nois.allocation.v1.QueryParamsResponse"></a>
 
 ### QueryParamsResponse
 QueryParamsResponse is the response type for the Query/Params RPC method.
@@ -166,7 +166,7 @@ QueryParamsResponse is the response type for the Query/Params RPC method.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| `params` | [Params](#noislabs.nois.allocation.v1.Params) |  | params defines the parameters of the module. |
+| `params` | [Params](#nois.allocation.v1.Params) |  | params defines the parameters of the module. |
 
 
 
@@ -179,14 +179,14 @@ QueryParamsResponse is the response type for the Query/Params RPC method.
  <!-- end HasExtensions -->
 
 
-<a name="noislabs.nois.allocation.v1.Query"></a>
+<a name="nois.allocation.v1.Query"></a>
 
 ### Query
 Query defines the gRPC querier service.
 
 | Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
 | ----------- | ------------ | ------------- | ------------| ------- | -------- |
-| `Params` | [QueryParamsRequest](#noislabs.nois.allocation.v1.QueryParamsRequest) | [QueryParamsResponse](#noislabs.nois.allocation.v1.QueryParamsResponse) |  | GET|/nois/alocation/v1/params|
+| `Params` | [QueryParamsRequest](#nois.allocation.v1.QueryParamsRequest) | [QueryParamsResponse](#nois.allocation.v1.QueryParamsResponse) |  | GET|/nois/alocation/v1/params|
 
  <!-- end services -->
 
@@ -199,7 +199,7 @@ Query defines the gRPC querier service.
 
 
 
-<a name="noislabs.nois.allocation.v1.MsgClaimRewards"></a>
+<a name="nois.allocation.v1.MsgClaimRewards"></a>
 
 ### MsgClaimRewards
 
@@ -214,7 +214,7 @@ Query defines the gRPC querier service.
 
 
 
-<a name="noislabs.nois.allocation.v1.MsgClaimRewardsResponse"></a>
+<a name="nois.allocation.v1.MsgClaimRewardsResponse"></a>
 
 ### MsgClaimRewardsResponse
 
@@ -235,14 +235,14 @@ Query defines the gRPC querier service.
  <!-- end HasExtensions -->
 
 
-<a name="noislabs.nois.allocation.v1.Msg"></a>
+<a name="nois.allocation.v1.Msg"></a>
 
 ### Msg
 Msg defines the allocation Msg service.
 
 | Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
 | ----------- | ------------ | ------------- | ------------| ------- | -------- |
-| `ClaimRewards` | [MsgClaimRewards](#noislabs.nois.allocation.v1.MsgClaimRewards) | [MsgClaimRewardsResponse](#noislabs.nois.allocation.v1.MsgClaimRewardsResponse) |  | |
+| `ClaimRewards` | [MsgClaimRewards](#nois.allocation.v1.MsgClaimRewards) | [MsgClaimRewardsResponse](#nois.allocation.v1.MsgClaimRewardsResponse) |  | |
 
  <!-- end services -->
 

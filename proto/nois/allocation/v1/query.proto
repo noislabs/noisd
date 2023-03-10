@@ -1,5 +1,5 @@
 syntax = "proto3";
-package noislabs.nois.allocation.v1;
+package nois.allocation.v1;
 
 import "gogoproto/gogo.proto";
 import "nois/allocation/v1/params.proto";
