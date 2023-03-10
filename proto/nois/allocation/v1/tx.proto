@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package noislabs.nois.allocation.v1;
+package nois.allocation.v1;
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
 option go_package = "github.com/noislabs/noisd/x/allocation/types";
