@@ -16,8 +16,11 @@ func (k Keeper) SetValidatorRewards(ctx sdk.Context, operator sdk.AccAddress, re
 func (k Keeper) GetValidatorRewards(ctx sdk.Context, operator sdk.AccAddress) types.ValidatorAccumulatedRewards {
 	store := ctx.KVStore(k.storeKey)
 	prefixStore := prefix.NewStore(store, types.ValidatorRewardsPrefix)
+	if !prefixStore.Has(operator) {
+		return types.ValidatorAccumulatedRewards{}
+	}
 	bz := prefixStore.Get(operator)
 	rewards := types.ValidatorAccumulatedRewards{}
-	k.cdc.MustUnmarshal(bz, &rewards)
+	 k.cdc.MustUnmarshal(bz, &rewards)
 	return rewards
 }
