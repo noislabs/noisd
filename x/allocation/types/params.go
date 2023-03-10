@@ -56,6 +56,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		),
 	}
 }
+
 func validateRandomnessRewardsReceiver(i interface{}) error {
 	v, ok := i.(string)
 	if !ok {
@@ -63,12 +64,12 @@ func validateRandomnessRewardsReceiver(i interface{}) error {
 	}
 
 	_, err := sdk.AccAddressFromBech32(v)
-
 	if err != nil {
 		return fmt.Errorf("invalid address: %s", v)
 	}
 	return nil
 }
+
 func validateDistributionProportions(i interface{}) error {
 	v, ok := i.(DistributionProportions)
 	if !ok {

@@ -14,6 +14,4 @@ const (
 	QuerierRoute = ModuleName
 )
 
-var (
-	ValidatorRewardsPrefix = []byte{0x01}
-)
+var ValidatorRewardsPrefix = []byte{0x01}
