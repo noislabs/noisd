@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package noislabs.nois.allocation.v1;
+
+option go_package = "github.com/noislabs/noisd/x/allocation/types";
+
+// Msg defines the allocation Msg service.
+service Msg {}

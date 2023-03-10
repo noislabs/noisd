@@ -1,0 +1,10 @@
+syntax = "proto3";
+package noislabs.nois.allocation.v1;
+
+import "gogoproto/gogo.proto";
+import "nois/allocation/v1/params.proto";
+
+option go_package = "github.com/noislabs/noisd/x/allocation/types";
+
+// GenesisState defines the allocation module's genesis state.
+message GenesisState { Params params = 1 [ (gogoproto.nullable) = false ]; }
