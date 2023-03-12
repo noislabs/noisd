@@ -12,7 +12,7 @@ const (
 	TypeMsgClaimRewards = "claim_rewards"
 )
 
-func NewMsgClaimRewards(sender string, address string) *MsgClaimRewards {
+func NewMsgClaimRewards(sender string) *MsgClaimRewards {
 	return &MsgClaimRewards{
 		Sender: sender,
 	}
