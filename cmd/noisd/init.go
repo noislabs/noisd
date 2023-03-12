@@ -107,6 +107,10 @@ func InitCmd(mbm module.BasicManager, defaultNodeHome string) *cobra.Command {
 
 			config.Moniker = args[0]
 
+			// Opening CORS ensures browser clients have the same access to an API endpoint
+			// as non-browser clients
+			config.RPC.CORSAllowedOrigins = []string{"*"}
+
 			// Consensus settings
 			config.Consensus.TimeoutPropose = 2000 * time.Millisecond
 			config.Consensus.TimeoutProposeDelta = 500 * time.Millisecond
