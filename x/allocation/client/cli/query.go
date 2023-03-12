@@ -9,6 +9,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/noislabs/noisd/x/allocation/types"
 )
 
@@ -55,5 +56,31 @@ func GetCmdQueryParams() *cobra.Command {
 
 	flags.AddQueryFlagsToCmd(cmd)
 
+	return cmd
+}
+
+func GetCmdQueryClaimableRewards() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "claimable-rewards",
+		Short: "Query the claimable rewards for a validator",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			address, err := sdk.AccAddressFromBech32(args[0])
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+			res, err := queryClient.ClaimableRewards(cmd.Context(), &types.QueryClaimableRewardsRequest{Address: address.String()})
+			if err != nil {
+				return err
+			}
+			return clientCtx.PrintProto(res)
+		},
+	}
 	return cmd
 }
