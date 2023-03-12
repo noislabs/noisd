@@ -16,3 +16,7 @@ func (k Keeper) Params(c context.Context, _ *types.QueryParamsRequest) (*types.Q
 
 	return &types.QueryParamsResponse{Params: params}, nil
 }
+
+func (k Keeper) ClaimableRewards(c context.Context, _ *types.QueryClaimableRewardsRequest) (*types.QueryClaimableRewardsResponse, error) {
+	return &types.QueryClaimableRewardsResponse{}, nil
+}

@@ -4,6 +4,7 @@ package nois.allocation.v1;
 import "gogoproto/gogo.proto";
 import "nois/allocation/v1/params.proto";
 import "google/api/annotations.proto";
+import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/noislabs/noisd/x/allocation/types";
 
@@ -21,4 +22,20 @@ service Query {
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/nois/alocation/v1/params";
   }
+  rpc ClaimableRewards(QueryClaimableRewardsRequest) returns (QueryClaimableRewardsResponse) {
+    option (google.api.http).get = "/nois/alocation/v1/claimable_rewards";
+  }
+}
+
+
+message QueryClaimableRewardsRequest {
+  string address = 1 [ (gogoproto.moretags) = "yaml:\"address\"" ];
+}
+
+message QueryClaimableRewardsResponse {
+  repeated cosmos.base.v1beta1.Coin coins = 1 [
+    (gogoproto.moretags) = "yaml:\"coins\"",
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
 }

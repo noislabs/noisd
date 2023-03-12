@@ -14,6 +14,8 @@
     - [GenesisState](#nois.allocation.v1.GenesisState)
   
 - [nois/allocation/v1/query.proto](#nois/allocation/v1/query.proto)
+    - [QueryClaimableRewardsRequest](#nois.allocation.v1.QueryClaimableRewardsRequest)
+    - [QueryClaimableRewardsResponse](#nois.allocation.v1.QueryClaimableRewardsResponse)
     - [QueryParamsRequest](#nois.allocation.v1.QueryParamsRequest)
     - [QueryParamsResponse](#nois.allocation.v1.QueryParamsResponse)
   
@@ -148,6 +150,36 @@ GenesisState defines the allocation module's genesis state.
 
 
 
+<a name="nois.allocation.v1.QueryClaimableRewardsRequest"></a>
+
+### QueryClaimableRewardsRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `address` | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="nois.allocation.v1.QueryClaimableRewardsResponse"></a>
+
+### QueryClaimableRewardsResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `coins` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) | repeated |  |
+
+
+
+
+
+
 <a name="nois.allocation.v1.QueryParamsRequest"></a>
 
 ### QueryParamsRequest
@@ -187,6 +219,7 @@ Query defines the gRPC querier service.
 | Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
 | ----------- | ------------ | ------------- | ------------| ------- | -------- |
 | `Params` | [QueryParamsRequest](#nois.allocation.v1.QueryParamsRequest) | [QueryParamsResponse](#nois.allocation.v1.QueryParamsResponse) |  | GET|/nois/alocation/v1/params|
+| `ClaimableRewards` | [QueryClaimableRewardsRequest](#nois.allocation.v1.QueryClaimableRewardsRequest) | [QueryClaimableRewardsResponse](#nois.allocation.v1.QueryClaimableRewardsResponse) |  | GET|/nois/alocation/v1/claimable_rewards|
 
  <!-- end services -->
 
