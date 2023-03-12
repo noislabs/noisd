@@ -30,13 +30,13 @@ func NewKeeper(
 	storeKey sdk.StoreKey,
 	accountKeeper types.AccountKeeper, bankKeeper types.BankKeeper, stakingKeeper types.StakingKeeper,
 	ps paramtypes.Subspace,
-) *Keeper {
+) Keeper {
 	// set KeyTable if it has not already been set
 	if !ps.HasKeyTable() {
 		ps = ps.WithKeyTable(types.ParamKeyTable())
 	}
 
-	return &Keeper{
+	return Keeper{
 		cdc:           cdc,
 		storeKey:      storeKey,
 		accountKeeper: accountKeeper, bankKeeper: bankKeeper, stakingKeeper: stakingKeeper,
