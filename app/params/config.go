@@ -23,10 +23,10 @@ type CustomAppConfig struct {
 const customAppTemplate = `
 [wasm]
 # This is the maximum sdk gas (wasm and storage) that we allow for any x/wasm "smart" queries
-query_gas_limit = 50000000
+query_gas_limit = 5000000
 
 # This the max gas that can be spent when executing a simulation TX
-simulation_gas_limit=50000000
+simulation_gas_limit=5000000
 
 # This defines the memory size for Wasm modules that we can keep cached to speed-up instantiation
 # The value is in MiB not bytes
@@ -43,8 +43,8 @@ func DefaultConfig() (string, interface{}) {
 	customConfig := CustomAppConfig{
 		Config: *serverConfig,
 		WASM: WasmConfig{
-			SimulationGasLimit: 50000000,
-			QueryGasLimit:      50000000,
+			SimulationGasLimit: 5000000,
+			QueryGasLimit:      5000000,
 			MemoryCacheSize:    512,
 		},
 	}
