@@ -1,10 +1,6 @@
-# Build image
-#   on Intel: docker build --tag noislabs/noisd:manual .
-#   on ARM:   docker build --tag noislabs/noisd:manual .
-#
-# Cross-build multi-arch image for Intel+ARM
-#   Build only:   docker buildx build --platform linux/arm64/v8,linux/amd64 --pull --tag noislabs/noisd:manual .
-#   Publish:      docker buildx build --platform linux/arm64/v8,linux/amd64 --pull --tag noislabs/noisd:0.0.0-lfg.1 . --push
+# Cross-build from Intel or ARM to x86_64. The node never uses an ARM build due to https://github.com/CosmWasm/cosmwasm/issues/1628
+#   Build:    docker buildx build --platform linux/amd64 --pull --tag noislabs/noisd:manual . --load
+#   Publish:  docker buildx build --platform linux/amd64 --pull --tag noislabs/noisd:0.0.0-lfg.1 . --push
 #
 # Run
 #   show version:       docker run --rm noislabs/noisd:manual
