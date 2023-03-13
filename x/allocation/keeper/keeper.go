@@ -129,7 +129,10 @@ func (k Keeper) DistributeValidatorRewards(ctx sdk.Context, rewards sdk.Coin) er
 			r.Rewards = r.Rewards.Add(sdk.NewCoin(rewards.Denom, validatorReward))
 		} else {
 			// initialize rewards
-			r.Rewards = sdk.NewCoins(sdk.NewCoin(rewards.Denom, validatorReward))
+			r = types.ValidatorReward{
+				Address: accAddr.String(),
+				Rewards: sdk.NewCoins(sdk.NewCoin(rewards.Denom, validatorReward)),
+			}
 		}
 		k.SetValidatorRewards(ctx, accAddr, r)
 	}

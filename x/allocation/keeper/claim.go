@@ -15,14 +15,14 @@ func (k Keeper) ClaimRewards(ctx sdk.Context, operator sdk.AccAddress) (sdk.Coin
 	if err != nil {
 		return sdk.Coins{}, err
 	}
-	k.SetValidatorRewards(ctx, operator, types.ValidatorAccumulatedRewards{})
+	k.SetValidatorRewards(ctx, operator, types.ValidatorReward{})
 	return valRewards.Rewards, nil
 }
 
-func (k Keeper) AllValidatorsRewards(ctx sdk.Context, operator sdk.AccAddress) ([]types.ValidatorAccumulatedRewards, error) {
+func (k Keeper) AllValidatorsRewards(ctx sdk.Context, operator sdk.AccAddress) ([]types.ValidatorReward, error) {
 	return nil, nil
 }
 
-func (k Keeper) SetValidatorsRewards(ctx sdk.Context, allRewards []types.ValidatorAccumulatedRewards) error {
+func (k Keeper) SetValidatorsRewards(ctx sdk.Context, allRewards []types.ValidatorReward) error {
 	return nil
 }

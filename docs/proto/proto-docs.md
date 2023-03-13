@@ -7,7 +7,6 @@
 - [nois/allocation/v1/params.proto](#nois/allocation/v1/params.proto)
     - [DistributionProportions](#nois.allocation.v1.DistributionProportions)
     - [Params](#nois.allocation.v1.Params)
-    - [ValidatorAccumulatedRewards](#nois.allocation.v1.ValidatorAccumulatedRewards)
     - [WeightedAddress](#nois.allocation.v1.WeightedAddress)
   
 - [nois/allocation/v1/rewards.proto](#nois/allocation/v1/rewards.proto)
@@ -75,21 +74,6 @@
 
 
 
-<a name="nois.allocation.v1.ValidatorAccumulatedRewards"></a>
-
-### ValidatorAccumulatedRewards
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| `rewards` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) | repeated | accumulated validator rewards |
-
-
-
-
-
-
 <a name="nois.allocation.v1.WeightedAddress"></a>
 
 ### WeightedAddress
@@ -130,8 +114,8 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| `address` | [string](#string) |  |  |
-| `amount` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) |  |  |
+| `address` | [string](#string) |  | validator address |
+| `rewards` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) | repeated | accumulated validator rewards |
 
 
 

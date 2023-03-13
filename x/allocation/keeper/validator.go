@@ -6,7 +6,7 @@ import (
 	"github.com/noislabs/noisd/x/allocation/types"
 )
 
-func (k Keeper) SetValidatorRewards(ctx sdk.Context, operator sdk.AccAddress, rewards types.ValidatorAccumulatedRewards) {
+func (k Keeper) SetValidatorRewards(ctx sdk.Context, operator sdk.AccAddress, rewards types.ValidatorReward) {
 	store := ctx.KVStore(k.storeKey)
 	prefixStore := prefix.NewStore(store, types.ValidatorRewardsPrefix)
 	// delete if rewards are zero
@@ -18,14 +18,14 @@ func (k Keeper) SetValidatorRewards(ctx sdk.Context, operator sdk.AccAddress, re
 	prefixStore.Set(operator, bz)
 }
 
-func (k Keeper) GetValidatorRewards(ctx sdk.Context, operator sdk.AccAddress) types.ValidatorAccumulatedRewards {
+func (k Keeper) GetValidatorRewards(ctx sdk.Context, operator sdk.AccAddress) types.ValidatorReward {
 	store := ctx.KVStore(k.storeKey)
 	prefixStore := prefix.NewStore(store, types.ValidatorRewardsPrefix)
 	if !prefixStore.Has(operator) {
-		return types.ValidatorAccumulatedRewards{}
+		return types.ValidatorReward{}
 	}
 	bz := prefixStore.Get(operator)
-	rewards := types.ValidatorAccumulatedRewards{}
+	rewards := types.ValidatorReward{}
 	k.cdc.MustUnmarshal(bz, &rewards)
 	return rewards
 }
