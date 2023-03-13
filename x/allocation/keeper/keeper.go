@@ -72,6 +72,28 @@ func (k Keeper) DistributeInflation(ctx sdk.Context) error {
 	if !validatorRewardsCoins.IsZero() {
 		k.DistributeValidatorRewards(ctx, validatorRewardsCoins)
 	}
+	devRewards := k.GetProportions(ctx, blockInflation, proportions.DeveloperRewards)
+	err := k.DistributeDeveloperRewards(ctx, blockInflationAddr, devRewards, params.WeightedDeveloperRewardsReceivers)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (k Keeper) DistributeDeveloperRewards(ctx sdk.Context, feeCollectorAddress sdk.AccAddress, devRewards sdk.Coin, devs []types.WeightedAddress) error {
+	for _, w := range devs {
+		devRewardPortionCoins := sdk.NewCoins(k.GetProportions(ctx, devRewards, w.Weight))
+		if w.Address != "" {
+			devRewardsAddr, err := sdk.AccAddressFromBech32(w.Address)
+			if err != nil {
+				return err
+			}
+			err = k.bankKeeper.SendCoins(ctx, feeCollectorAddress, devRewardsAddr, devRewardPortionCoins)
+			if err != nil {
+				return err
+			}
+			k.Logger(ctx).Debug("sent coins to developer", "amount", devRewardPortionCoins.String(), "from", feeCollectorAddress)
+		}
+	}
 	return nil
 }
 
