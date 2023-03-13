@@ -9,7 +9,8 @@ import (
 // DefaultGenesis returns the default allocation genesis state
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
-		Params: DefaultParams(),
+		Params:           DefaultParams(),
+		ValidatorRewards: make([]ValidatorReward, 0),
 	}
 }
 

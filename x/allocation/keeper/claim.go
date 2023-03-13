@@ -11,7 +11,7 @@ func (k Keeper) ClaimRewards(ctx sdk.Context, operator sdk.AccAddress) (sdk.Coin
 	if valRewards.Rewards.IsZero() {
 		return sdk.Coins{}, nil
 	}
-	err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, operator, valRewards.Rewards)
+	err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ValidatorRewardsPool, operator, valRewards.Rewards)
 	if err != nil {
 		return sdk.Coins{}, err
 	}

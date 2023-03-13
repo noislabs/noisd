@@ -10,8 +10,6 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/noislabs/noisd/x/allocation/types"
-
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 type Keeper struct {
@@ -71,24 +69,37 @@ func (k Keeper) DistributeInflation(ctx sdk.Context) error {
 	// fund validator rewards pool
 	validatorRewardsCoins := k.GetProportions(ctx, blockInflation, proportions.ValidatorRewards)
 	if !validatorRewardsCoins.IsZero() {
-		k.bankKeeper.SendCoinsFromModuleToModule(ctx, authtypes.FeeCollectorName, types.ValidatorRewardsPool, sdk.NewCoins(validatorRewardsCoins))
+		k.DistributeValidatorRewards(ctx, validatorRewardsCoins)
 	}
 	return nil
 }
 
-func (k Keeper) DistributeValidatorRewards(ctx sdk.Context) error {
-	validators := k.stakingKeeper.GetLastValidators(ctx)
-	validValidators := make([]stakingtypes.Validator, 0)
-	for _, validator := range validators {
-		// skip jailed and not bonded
-		if validator.Jailed || validator.Status != stakingtypes.Bonded {
-			continue
-		}
-		// TODO: retrieve self-delegation
-		validValidators = append(validValidators, validator)
+func (k Keeper) DistributeValidatorRewards(ctx sdk.Context, rewards sdk.Coin) error {
+	err := k.bankKeeper.SendCoinsFromModuleToModule(ctx, authtypes.FeeCollectorName, types.ValidatorRewardsPool, sdk.NewCoins(rewards))
+	if err != nil {
+		return err
 	}
-	// TODO:  accumulate rewards
-	fmt.Println(validValidators)
+	validators := k.stakingKeeper.GetLastValidators(ctx)
+	if len(validators) == 0 {
+		return nil
+	}
+	validatorReward := rewards.Amount.QuoRaw(int64(len(validators)))
+	for _, v := range validators {
+		operator, err := sdk.ValAddressFromBech32(v.OperatorAddress)
+		if err != nil {
+			return err
+		}
+		accAddr := sdk.AccAddress(operator)
+		r := k.GetValidatorRewards(ctx, accAddr)
+		if r.Rewards != nil && !r.Rewards.Empty() {
+			// add to existing rewards
+			r.Rewards = r.Rewards.Add(sdk.NewCoin(rewards.Denom, validatorReward))
+		} else {
+			// initialize rewards
+			r.Rewards = sdk.NewCoins(sdk.NewCoin(rewards.Denom, validatorReward))
+		}
+		k.SetValidatorRewards(ctx, accAddr, r)
+	}
 	return nil
 }
 
