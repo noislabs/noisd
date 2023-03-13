@@ -23,6 +23,7 @@ type Keeper struct {
 	paramstore paramtypes.Subspace
 }
 
+// NewKeeper creates a new allocation Keeper instance.
 func NewKeeper(
 	cdc codec.BinaryCodec,
 	storeKey sdk.StoreKey,
@@ -74,24 +75,33 @@ func (k Keeper) DistributeInflation(ctx sdk.Context) error {
 	return nil
 }
 
+// DistributeValidatorRewards distributes rewards to validators
 func (k Keeper) DistributeValidatorRewards(ctx sdk.Context, rewards sdk.Coin) error {
 	err := k.bankKeeper.SendCoinsFromModuleToModule(ctx, authtypes.FeeCollectorName, types.ValidatorRewardsPool, sdk.NewCoins(rewards))
 	if err != nil {
 		return err
 	}
 	validators := k.stakingKeeper.GetLastValidators(ctx)
+	// this should never happen but adding the validation
 	if len(validators) == 0 {
 		return nil
 	}
+	// get the amount of coins to distribute to each validator
 	validatorReward := rewards.Amount.QuoRaw(int64(len(validators)))
+	// distribute coins to each validator by accumulating their rewards
+	// the module account will hold the tokens until they are withdrawn by validators
 	for _, v := range validators {
+		// get the validator operator address
 		operator, err := sdk.ValAddressFromBech32(v.OperatorAddress)
+		// error should never happen as stored validator addresses must always be valid
 		if err != nil {
 			return err
 		}
+		// we just need to cast directly to sdk.AccAddress because the bech32 parsing
+		// was previously validated and the underlying bytes are the same
 		accAddr := sdk.AccAddress(operator)
 		r := k.GetValidatorRewards(ctx, accAddr)
-		if r.Rewards != nil && !r.Rewards.Empty() {
+		if r.Rewards != nil && !r.Rewards.Empty() && !r.Rewards.IsZero() {
 			// add to existing rewards
 			r.Rewards = r.Rewards.Add(sdk.NewCoin(rewards.Denom, validatorReward))
 		} else {
@@ -109,6 +119,7 @@ func (k Keeper) GetProportions(ctx sdk.Context, mintedCoin sdk.Coin, ratio sdk.D
 	return sdk.NewCoin(mintedCoin.Denom, mintedCoin.Amount.ToDec().Mul(ratio).TruncateInt())
 }
 
+// Logger returns a module-specific logger.
 func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
