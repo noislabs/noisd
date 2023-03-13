@@ -1,0 +1,20 @@
+version: 2
+updates:
+- package-ecosystem: gomod
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "10:00"
+  open-pull-requests-limit: 10
+  ignore:
+    - dependency-name: "github.com/informalsystems/tendermint"
+      update-types: ["version-update:semver-major", "version-update:semver-minor"]
+  ignore:
+    - dependency-name: "github.com/tendermint/tendermint"
+      update-types: ["version-update:semver-major", "version-update:semver-minor"]
+  ignore:
+    - dependency-name: "github.com/cosmos/cosmos-sdk"
+      update-types: ["version-update:semver-major", "version-update:semver-minor"]
+  ignore:
+    - dependency-name: "github.com/cosmos/ibc-go"
+      update-types: ["version-update:semver-major", "version-update:semver-minor"]
