@@ -117,7 +117,7 @@ func validateWeightedDeveloperRewardsReceivers(i interface{}) error {
 		if w.Address != "" {
 			_, err := sdk.AccAddressFromBech32(w.Address)
 			if err != nil {
-				return fmt.Errorf("invalid address at %dth", i)
+				return fmt.Errorf("invalid address at %dth %s", i, w)
 			}
 		}
 		if !w.Weight.IsPositive() {

@@ -1,9 +1,10 @@
-package testing
+package noistesting
 
 import (
 	"encoding/json"
 	"time"
 
+	"github.com/cosmos/cosmos-sdk/std"
 	abci "github.com/tendermint/tendermint/abci/types"
 	dbm "github.com/tendermint/tm-db"
 
@@ -23,6 +24,10 @@ func (EmptyOptions) Get(key string) interface{} {
 func NewApp(home string) *app.NoisApp {
 	db := dbm.NewMemDB()
 	encCdc := appparams.MakeEncodingConfig()
+	std.RegisterLegacyAminoCodec(encCdc.Amino)
+	std.RegisterInterfaces(encCdc.InterfaceRegistry)
+	app.ModuleBasics.RegisterLegacyAminoCodec(encCdc.Amino)
+	app.ModuleBasics.RegisterInterfaces(encCdc.InterfaceRegistry)
 	noisApp := app.NewNoisApp(
 		log.NewNopLogger(),
 		db,
@@ -59,8 +64,7 @@ var defaultConsensusParams = &abci.ConsensusParams{
 
 func SetupNewApp(home string) *app.NoisApp {
 	noisApp := NewApp(home)
-	// Initialize the chain
-	noisApp.InitChain(abci.RequestInitChain{})
+
 	encCdc := appparams.MakeEncodingConfig()
 	stateBytes, err := json.MarshalIndent(app.ModuleBasics.DefaultGenesis(encCdc.Codec), "", " ")
 	if err != nil {
@@ -72,6 +76,6 @@ func SetupNewApp(home string) *app.NoisApp {
 		ConsensusParams: defaultConsensusParams,
 		AppStateBytes:   stateBytes,
 	})
-	noisApp.Commit()
+
 	return noisApp
 }
