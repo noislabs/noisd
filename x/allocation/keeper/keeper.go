@@ -79,6 +79,7 @@ func (k Keeper) DistributeInflation(ctx sdk.Context) error {
 	}
 	return nil
 }
+
 func (k Keeper) DistributeDeveloperRewards(ctx sdk.Context, feeCollectorAddress sdk.AccAddress, devRewards sdk.Coin, devs []types.WeightedAddress) error {
 	for _, w := range devs {
 		devRewardPortionCoins := sdk.NewCoins(k.GetProportions(ctx, devRewards, w.Weight))
