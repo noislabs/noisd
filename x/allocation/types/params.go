@@ -107,14 +107,13 @@ func validateWeightedDeveloperRewardsReceivers(i interface{}) error {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
-	// fund community pool when rewards address is empty
+	// allow no addresses and send remaining to stakers
 	if len(v) == 0 {
 		return nil
 	}
 
 	weightSum := sdk.NewDec(0)
 	for i, w := range v {
-		// we allow address to be "" to go to community pool
 		if w.Address != "" {
 			_, err := sdk.AccAddressFromBech32(w.Address)
 			if err != nil {
