@@ -10,6 +10,9 @@
     - [ValidatorAccumulatedRewards](#nois.allocation.v1.ValidatorAccumulatedRewards)
     - [WeightedAddress](#nois.allocation.v1.WeightedAddress)
   
+- [nois/allocation/v1/rewards.proto](#nois/allocation/v1/rewards.proto)
+    - [ValidatorReward](#nois.allocation.v1.ValidatorReward)
+  
 - [nois/allocation/v1/genesis.proto](#nois/allocation/v1/genesis.proto)
     - [GenesisState](#nois.allocation.v1.GenesisState)
   
@@ -112,6 +115,38 @@
 
 
 
+<a name="nois/allocation/v1/rewards.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## nois/allocation/v1/rewards.proto
+
+
+
+<a name="nois.allocation.v1.ValidatorReward"></a>
+
+### ValidatorReward
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| `address` | [string](#string) |  |  |
+| `amount` | [cosmos.base.v1beta1.Coin](#cosmos.base.v1beta1.Coin) |  |  |
+
+
+
+
+
+ <!-- end messages -->
+
+ <!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+ <!-- end services -->
+
+
+
 <a name="nois/allocation/v1/genesis.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
@@ -128,6 +163,7 @@ GenesisState defines the allocation module's genesis state.
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | `params` | [Params](#nois.allocation.v1.Params) |  |  |
+| `validator_rewards` | [ValidatorReward](#nois.allocation.v1.ValidatorReward) | repeated |  |
 
 
 

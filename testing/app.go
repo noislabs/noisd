@@ -14,12 +14,12 @@ import (
 	tmtypes "github.com/tendermint/tendermint/types"
 )
 
-type EmptyOptions struct {
-}
+type EmptyOptions struct{}
 
 func (EmptyOptions) Get(key string) interface{} {
 	return nil
 }
+
 func NewApp(home string) *app.NoisApp {
 	db := dbm.NewMemDB()
 	encCdc := appparams.MakeEncodingConfig()
@@ -30,7 +30,7 @@ func NewApp(home string) *app.NoisApp {
 		true,             // load latest version
 		map[int64]bool{}, // no skip upgrade heights
 		home,
-		5, //invariant check periods,
+		5, // invariant check periods,
 		encCdc,
 		app.GetWasmEnabledProposals(),
 		EmptyOptions{},

@@ -22,11 +22,11 @@ service Query {
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/nois/alocation/v1/params";
   }
-  rpc ClaimableRewards(QueryClaimableRewardsRequest) returns (QueryClaimableRewardsResponse) {
+  rpc ClaimableRewards(QueryClaimableRewardsRequest)
+      returns (QueryClaimableRewardsResponse) {
     option (google.api.http).get = "/nois/alocation/v1/claimable_rewards";
   }
 }
-
 
 message QueryClaimableRewardsRequest {
   string address = 1 [ (gogoproto.moretags) = "yaml:\"address\"" ];

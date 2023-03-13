@@ -1,0 +1,15 @@
+syntax = "proto3";
+package nois.allocation.v1;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/noislabs/noisd/x/allocation/types";
+
+message ValidatorReward {
+  string address = 1 [ (gogoproto.moretags) = "yaml:\"address\"" ];
+  cosmos.base.v1beta1.Coin amount = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.moretags) = "yaml:\"amount\""
+  ];
+}
