@@ -63,14 +63,20 @@ func (k Keeper) DistributeInflation(ctx sdk.Context) error {
 			return err
 		}
 		if !randomnessRewardsCoin.IsZero() {
-			k.bankKeeper.SendCoinsFromModuleToAccount(ctx, authtypes.FeeCollectorName, randomnessRewardsReceiver, sdk.NewCoins(randomnessRewardsCoin))
+			err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, authtypes.FeeCollectorName, randomnessRewardsReceiver, sdk.NewCoins(randomnessRewardsCoin))
+			if err != nil {
+				return err
+			}
 		}
 	}
 
 	// fund validator rewards pool
 	validatorRewardsCoins := k.GetProportions(ctx, blockInflation, proportions.ValidatorRewards)
 	if !validatorRewardsCoins.IsZero() {
-		k.DistributeValidatorRewards(ctx, validatorRewardsCoins)
+		err := k.DistributeValidatorRewards(ctx, validatorRewardsCoins)
+		if err != nil {
+			return err
+		}
 	}
 	devRewards := k.GetProportions(ctx, blockInflation, proportions.DeveloperRewards)
 	err := k.DistributeDeveloperRewards(ctx, blockInflationAddr, devRewards, params.WeightedDeveloperRewardsReceivers)
