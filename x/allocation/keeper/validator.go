@@ -9,6 +9,11 @@ import (
 func (k Keeper) SetValidatorRewards(ctx sdk.Context, operator sdk.AccAddress, rewards types.ValidatorAccumulatedRewards) {
 	store := ctx.KVStore(k.storeKey)
 	prefixStore := prefix.NewStore(store, types.ValidatorRewardsPrefix)
+	// delete if rewards are zero
+	if rewards.Rewards.IsZero() {
+		prefixStore.Delete(operator)
+		return
+	}
 	bz := k.cdc.MustMarshal(&rewards)
 	prefixStore.Set(operator, bz)
 }

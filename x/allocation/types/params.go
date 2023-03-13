@@ -24,6 +24,7 @@ func DefaultParams() Params {
 			DeveloperRewards:  sdk.NewDecWithPrec(20, 2), // 20 %
 		},
 		WeightedDeveloperRewardsReceivers: []WeightedAddress{},
+		RandomnessRewardsReceiver:         "",
 	}
 }
 
@@ -63,6 +64,9 @@ func validateRandomnessRewardsReceiver(i interface{}) error {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
+	if v == "" {
+		return nil
+	}
 	_, err := sdk.AccAddressFromBech32(v)
 	if err != nil {
 		return fmt.Errorf("invalid address: %s", v)
