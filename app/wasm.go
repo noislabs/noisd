@@ -45,7 +45,7 @@ func GetWasmEnabledProposals() []wasm.ProposalType {
 // NoisGasRegister creates instance with default values
 func NoisGasRegister() wasmkeeper.WasmGasRegister {
 	register := wasmkeeper.DefaultGasRegisterConfig()
-	register.CompileCost = 1
+	register.CompileCost = 3 // gas per byte
 	return wasmkeeper.NewWasmGasRegister(register)
 }
 
