@@ -529,6 +529,7 @@ func NewNoisApp(
 			WasmConfig:        &wasmConfig,
 			TXCounterStoreKey: keys[wasm.StoreKey],
 			Codec:             app.appCodec,
+			govKeeper:         app.GovKeeper,
 		},
 	)
 	if err != nil {
