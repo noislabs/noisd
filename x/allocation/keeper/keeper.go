@@ -122,7 +122,7 @@ func (k Keeper) DistributeValidatorRewards(ctx sdk.Context, rewards sdk.Coin) er
 		}
 		// we just need to cast directly to sdk.AccAddress because the bech32 parsing
 		// was previously validated and the underlying bytes are the same
-		accAddr := sdk.AccAddress(operator)
+		accAddr := sdk.AccAddress(operator.Bytes())
 		r := k.GetValidatorRewards(ctx, accAddr)
 		if r.Rewards != nil && !r.Rewards.Empty() && !r.Rewards.IsZero() {
 			// add to existing rewards

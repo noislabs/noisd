@@ -34,7 +34,14 @@ func ParamKeyTable() paramtypes.KeyTable {
 }
 
 func (p Params) Validate() error {
-	return nil
+	if err := validateDistributionProportions(p.DistributionProportions); err != nil {
+		return err
+	}
+	if err := validateWeightedDeveloperRewardsReceivers(p.WeightedDeveloperRewardsReceivers); err != nil {
+		return err
+	}
+	err := validateRandomnessRewardsReceiver(p.RandomnessRewardsReceiver)
+	return err
 }
 
 // Implements params.ParamSet

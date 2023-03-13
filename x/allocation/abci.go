@@ -15,6 +15,6 @@ func BeginBlocker(ctx sdk.Context, keeper keeper.Keeper, _ abci.RequestBeginBloc
 	defer telemetry.ModuleMeasureSince(types.ModuleName, time.Now(), telemetry.MetricKeyBeginBlocker)
 
 	if err := keeper.DistributeInflation(ctx); err != nil {
-		panic(fmt.Sprintf("Error distribute inflation: %s", err.Error()))
+		panic(fmt.Sprintf("error distribute inflation: %s", err.Error()))
 	}
 }
