@@ -48,7 +48,7 @@ func (k Keeper) DistributeInflation(ctx sdk.Context) error {
 	blockInflationAddr := k.accountKeeper.GetModuleAccount(ctx, authtypes.FeeCollectorName).GetAddress()
 	blockInflation := k.bankKeeper.GetBalance(ctx, blockInflationAddr, k.stakingKeeper.BondDenom(ctx))
 
-	// if there is no inflation, return
+	// if there is no inflation or fees, return
 	if blockInflation.IsZero() {
 		return nil
 	}
