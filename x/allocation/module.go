@@ -108,7 +108,8 @@ type AppModule struct {
 }
 
 func NewAppModule(cdc codec.Codec, keeper keeper.Keeper,
-	bankKeeper types.BankKeeper, stakingKeeper types.StakingKeeper) AppModule {
+	bankKeeper types.BankKeeper, stakingKeeper types.StakingKeeper,
+) AppModule {
 	return AppModule{
 		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         keeper,

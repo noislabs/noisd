@@ -14,7 +14,8 @@ func InitGenesis(ctx sdk.Context,
 	k keeper.Keeper,
 	bankKeeper types.BankKeeper,
 	stakingKeeper types.StakingKeeper,
-	genState types.GenesisState) {
+	genState types.GenesisState,
+) {
 	validatorRewardsPool := k.GetModuleAccount(ctx, types.ValidatorRewardsPool)
 	k.GetModuleAccount(ctx, types.ModuleName)
 	k.SetParams(ctx, genState.Params)
@@ -33,7 +34,6 @@ func InitGenesis(ctx sdk.Context,
 	if !totalBalance.Amount.Equal(totalRewards) {
 		panic(fmt.Sprintf("allocation genesis: total rewards %s does not match total balance %s", totalRewards.String(), totalBalance.Amount.String()))
 	}
-
 }
 
 // ExportGenesis returns the alloc module's exported genesis.
