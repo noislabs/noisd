@@ -28,3 +28,23 @@ func (k Keeper) GetValidatorRewards(ctx sdk.Context, operator sdk.AccAddress) in
 	}
 	return int64(sdk.BigEndianToUint64(bz))
 }
+
+// ValidatorRewards returns the rewards for all validators used for genesis export
+func (k Keeper) ValidatorRewards(ctx sdk.Context) []types.ValidatorReward {
+	store := ctx.KVStore(k.storeKey)
+	prefixStore := prefix.NewStore(store, types.ValidatorRewardsPrefix)
+	iterator := prefixStore.Iterator(nil, nil)
+	defer iterator.Close()
+	validatorRewards := []types.ValidatorReward{}
+	denom := k.stakingKeeper.BondDenom(ctx)
+	for ; iterator.Valid(); iterator.Next() {
+		address := sdk.AccAddress(iterator.Key())
+		amount := int64(sdk.BigEndianToUint64(iterator.Value()))
+		reward := types.ValidatorReward{
+			Address: address.String(),
+			Rewards: sdk.NewCoins(sdk.NewInt64Coin(denom, amount)),
+		}
+		validatorRewards = append(validatorRewards, reward)
+	}
+	return validatorRewards
+}
