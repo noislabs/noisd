@@ -150,3 +150,8 @@ proto-format:
 
 proto-swagger-gen:
 	@./scripts/protoc-swagger-gen.sh
+
+# Show the version that `make build` is using
+.PHONY: version
+version:
+	@echo "$(VERSION)"
