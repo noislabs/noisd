@@ -427,7 +427,7 @@ func NewNoisApp(
 		transfer.NewAppModule(app.TransferKeeper),
 		wasm.NewAppModule(appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper),
 		crisis.NewAppModule(&app.CrisisKeeper, skipGenesisInvariants),
-		allocation.NewAppModule(appCodec, app.AllocationKeeper),
+		allocation.NewAppModule(appCodec, app.AllocationKeeper, app.BankKeeper, app.StakingKeeper),
 	)
 
 	app.mm.SetOrderBeginBlockers(

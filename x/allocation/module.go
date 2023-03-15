@@ -102,12 +102,18 @@ type AppModule struct {
 	AppModuleBasic
 
 	keeper keeper.Keeper
+
+	bankKeeper    types.BankKeeper
+	stakingKeeper types.StakingKeeper
 }
 
-func NewAppModule(cdc codec.Codec, keeper keeper.Keeper) AppModule {
+func NewAppModule(cdc codec.Codec, keeper keeper.Keeper,
+	bankKeeper types.BankKeeper, stakingKeeper types.StakingKeeper) AppModule {
 	return AppModule{
 		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         keeper,
+		bankKeeper:     bankKeeper,
+		stakingKeeper:  stakingKeeper,
 	}
 }
 
@@ -145,7 +151,7 @@ func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.Ra
 	var genState types.GenesisState
 	cdc.MustUnmarshalJSON(gs, &genState)
 
-	InitGenesis(ctx, am.keeper, genState)
+	InitGenesis(ctx, am.keeper, am.bankKeeper, am.stakingKeeper, genState)
 	return []abci.ValidatorUpdate{}
 }
 
