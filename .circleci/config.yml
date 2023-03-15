@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/go:1.20.1
+      - image: cimg/go:1.20.2
     steps:
       - checkout
       - run:
@@ -22,7 +22,7 @@ jobs:
             fi
   tidy:
     docker:
-      - image: cimg/go:1.20.1
+      - image: cimg/go:1.20.2
     steps:
       - checkout
       - run:
@@ -39,7 +39,7 @@ jobs:
             fi
   format-go:
     docker:
-      - image: cimg/go:1.20.1
+      - image: cimg/go:1.20.2
     steps:
       - run:
           name: Install gofumpt
@@ -55,7 +55,7 @@ jobs:
             [ "$(gofumpt -l .)" = "" ] || (gofumpt -d . && exit 1)
   docker-image:
     docker:
-      - image: cimg/go:1.20.1
+      - image: cimg/go:1.20.2
     steps:
       - checkout
       - setup_remote_docker:

@@ -6,7 +6,7 @@
 #   show version:       docker run --rm noislabs/noisd:manual
 #   libwasmvm version:  docker run --rm noislabs/noisd:manual noisd query wasm libwasmvm-version
 #   shell:              docker run --rm -it noislabs/noisd:manual sh
-FROM golang:1.20.1-alpine3.17 AS go-builder
+FROM golang:1.20.2-alpine3.17 AS go-builder
 
 # this comes from standard alpine nightly file
 #  https://github.com/rust-lang/docker-rust-nightly/blob/master/alpine3.12/Dockerfile
