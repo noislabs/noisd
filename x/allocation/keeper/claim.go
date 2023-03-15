@@ -1,21 +1,25 @@
 package keeper
 
 import (
+	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/noislabs/noisd/x/allocation/types"
 )
 
 // ClaimRewards claims the rewards for the given operator
 func (k Keeper) ClaimRewards(ctx sdk.Context, operator sdk.AccAddress) (sdk.Coins, error) {
-	valRewards := k.GetValidatorRewards(ctx, operator)
-	if valRewards.Rewards.IsZero() {
-		return sdk.Coins{}, nil
+	rewardAmount := k.GetValidatorRewards(ctx, operator)
+	if rewardAmount == 0 {
+		return sdk.Coins{}, fmt.Errorf("no rewards to claim")
 	}
-	err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ValidatorRewardsPool, operator, valRewards.Rewards)
+	// send the rewards to the operator
+	reward := sdk.NewCoins(sdk.NewInt64Coin(k.stakingKeeper.BondDenom(ctx), rewardAmount))
+	err := k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ValidatorRewardsPool, operator, reward)
 	if err != nil {
 		return sdk.Coins{}, err
 	}
 	// remove the rewards from the store
 	k.DeleteValidatorRewards(ctx, operator)
-	return valRewards.Rewards, nil
+	return reward, nil
 }

@@ -24,6 +24,9 @@ func (k Keeper) ClaimableRewards(goCtx context.Context, req *types.QueryClaimabl
 	if err != nil {
 		return nil, err
 	}
-	validatorRewards := k.GetValidatorRewards(ctx, address)
-	return &types.QueryClaimableRewardsResponse{Coins: validatorRewards.Rewards}, nil
+	rewardAmount := k.GetValidatorRewards(ctx, address)
+
+	return &types.QueryClaimableRewardsResponse{
+		Coins: sdk.NewCoins(sdk.NewInt64Coin(k.stakingKeeper.BondDenom(ctx), rewardAmount)),
+	}, nil
 }

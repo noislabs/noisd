@@ -55,8 +55,9 @@ func (k Keeper) DistributeInflation(ctx sdk.Context) error {
 	}
 	params := k.GetParams(ctx)
 	proportions := params.DistributionProportions
+
+	// fund randomness rewards address
 	if params.RandomnessRewardsReceiver != "" {
-		// fund randomness rewards address
 		randomnessRewardsCoin := k.GetProportions(ctx, blockInflation, proportions.RandomnessRewards)
 		randomnessRewardsReceiver, err := sdk.AccAddressFromBech32(params.RandomnessRewardsReceiver)
 		if err != nil {
@@ -72,14 +73,12 @@ func (k Keeper) DistributeInflation(ctx sdk.Context) error {
 
 	// fund validator rewards pool
 	validatorRewardsCoins := k.GetProportions(ctx, blockInflation, proportions.ValidatorRewards)
-	if !validatorRewardsCoins.IsZero() {
-		err := k.DistributeValidatorRewards(ctx, validatorRewardsCoins)
-		if err != nil {
-			return err
-		}
+	err := k.DistributeValidatorRewards(ctx, validatorRewardsCoins)
+	if err != nil {
+		return err
 	}
 	devRewards := k.GetProportions(ctx, blockInflation, proportions.DeveloperRewards)
-	err := k.DistributeDeveloperRewards(ctx, blockInflationAddr, devRewards, params.WeightedDeveloperRewardsReceivers)
+	err = k.DistributeDeveloperRewards(ctx, blockInflationAddr, devRewards, params.WeightedDeveloperRewardsReceivers)
 	if err != nil {
 		return err
 	}
@@ -87,6 +86,9 @@ func (k Keeper) DistributeInflation(ctx sdk.Context) error {
 }
 
 func (k Keeper) DistributeDeveloperRewards(ctx sdk.Context, feeCollectorAddress sdk.AccAddress, devRewards sdk.Coin, devs []types.WeightedAddress) error {
+	if devRewards.IsZero() {
+		return nil
+	}
 	for _, w := range devs {
 		devRewardPortionCoins := sdk.NewCoins(k.GetProportions(ctx, devRewards, w.Weight))
 		if w.Address != "" {
@@ -98,7 +100,6 @@ func (k Keeper) DistributeDeveloperRewards(ctx sdk.Context, feeCollectorAddress 
 			if err != nil {
 				return err
 			}
-			k.Logger(ctx).Debug("sent coins to developer", "amount", devRewardPortionCoins.String(), "from", feeCollectorAddress)
 		}
 	}
 	return nil
@@ -106,6 +107,9 @@ func (k Keeper) DistributeDeveloperRewards(ctx sdk.Context, feeCollectorAddress 
 
 // DistributeValidatorRewards distributes rewards to validators
 func (k Keeper) DistributeValidatorRewards(ctx sdk.Context, rewards sdk.Coin) error {
+	if rewards.IsZero() {
+		return nil
+	}
 	err := k.bankKeeper.SendCoinsFromModuleToModule(ctx, authtypes.FeeCollectorName, types.ValidatorRewardsPool, sdk.NewCoins(rewards))
 	if err != nil {
 		return err
@@ -130,17 +134,7 @@ func (k Keeper) DistributeValidatorRewards(ctx sdk.Context, rewards sdk.Coin) er
 		// was previously validated and the underlying bytes are the same
 		accAddr := sdk.AccAddress(operator.Bytes())
 		r := k.GetValidatorRewards(ctx, accAddr)
-		if r.Rewards != nil && !r.Rewards.Empty() && !r.Rewards.IsZero() {
-			// add to existing rewards
-			r.Rewards = r.Rewards.Add(sdk.NewCoin(rewards.Denom, validatorReward))
-		} else {
-			// initialize rewards
-			r = types.ValidatorReward{
-				Address: accAddr.String(),
-				Rewards: sdk.NewCoins(sdk.NewCoin(rewards.Denom, validatorReward)),
-			}
-		}
-		k.SetValidatorRewards(ctx, accAddr, r)
+		k.SetValidatorRewards(ctx, accAddr, validatorReward.Add(sdk.NewInt(r)).Int64())
 	}
 	return nil
 }
