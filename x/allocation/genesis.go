@@ -9,6 +9,8 @@ import (
 // InitGenesis initializes the alloc module's state from a provided genesis
 // state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
+	k.GetModuleAccount(ctx, types.ValidatorRewardsPool)
+	k.GetModuleAccount(ctx, types.ModuleName)
 	k.SetParams(ctx, genState.Params)
 }
 

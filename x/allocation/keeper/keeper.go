@@ -149,3 +149,8 @@ func (k Keeper) GetProportions(ctx sdk.Context, mintedCoin sdk.Coin, ratio sdk.D
 func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
+
+// GetModuleAccountBalance gets the module account.
+func (k Keeper) GetModuleAccount(ctx sdk.Context, moduleName string) authtypes.AccountI {
+	return k.accountKeeper.GetModuleAccount(ctx, moduleName)
+}
