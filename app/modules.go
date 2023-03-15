@@ -33,6 +33,8 @@ import (
 	ibctransfertypes "github.com/cosmos/ibc-go/v4/modules/apps/transfer/types"
 	ibc "github.com/cosmos/ibc-go/v4/modules/core"
 	ibcclientclient "github.com/cosmos/ibc-go/v4/modules/core/02-client/client"
+	allocation "github.com/noislabs/noisd/x/allocation"
+	allocationtypes "github.com/noislabs/noisd/x/allocation/types"
 )
 
 var (
@@ -66,16 +68,19 @@ var (
 		transfer.AppModuleBasic{},
 		vesting.AppModuleBasic{},
 		wasm.AppModuleBasic{},
+		allocation.AppModuleBasic{},
 	)
 
 	moduleAccountPermissions = map[string][]string{
-		authtypes.FeeCollectorName:     nil,
-		distrtypes.ModuleName:          nil,
-		minttypes.ModuleName:           {authtypes.Minter},
-		stakingtypes.BondedPoolName:    {authtypes.Burner, authtypes.Staking},
-		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
-		govtypes.ModuleName:            {authtypes.Burner},
-		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
-		wasm.ModuleName:                {authtypes.Burner},
+		authtypes.FeeCollectorName:           nil,
+		distrtypes.ModuleName:                nil,
+		minttypes.ModuleName:                 {authtypes.Minter},
+		stakingtypes.BondedPoolName:          {authtypes.Burner, authtypes.Staking},
+		stakingtypes.NotBondedPoolName:       {authtypes.Burner, authtypes.Staking},
+		govtypes.ModuleName:                  {authtypes.Burner},
+		ibctransfertypes.ModuleName:          {authtypes.Minter, authtypes.Burner},
+		wasm.ModuleName:                      {authtypes.Burner},
+		allocationtypes.ModuleName:           nil,
+		allocationtypes.ValidatorRewardsPool: nil,
 	}
 )

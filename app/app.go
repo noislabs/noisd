@@ -89,6 +89,9 @@ import (
 	ibchost "github.com/cosmos/ibc-go/v4/modules/core/24-host"
 	ibckeeper "github.com/cosmos/ibc-go/v4/modules/core/keeper"
 	noisappparams "github.com/noislabs/noisd/app/params"
+	"github.com/noislabs/noisd/x/allocation"
+	allocationkeeper "github.com/noislabs/noisd/x/allocation/keeper"
+	allocationtypes "github.com/noislabs/noisd/x/allocation/types"
 	tmos "github.com/tendermint/tendermint/libs/os"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 )
@@ -143,6 +146,7 @@ type NoisApp struct {
 	WasmKeeper wasm.Keeper
 
 	// Nois keepers
+	AllocationKeeper allocationkeeper.Keeper
 
 	// encoding configuration
 	legacyAmino       *codec.LegacyAmino //nolint:staticcheck
@@ -389,6 +393,15 @@ func NewNoisApp(
 		govRouter,
 	)
 
+	app.AllocationKeeper = allocationkeeper.NewKeeper(
+		appCodec,
+		keys[allocationtypes.StoreKey],
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.StakingKeeper,
+		app.GetSubspace(allocationtypes.ModuleName),
+	)
+
 	skipGenesisInvariants := cast.ToBool(appOpts.Get(crisis.FlagSkipGenesisInvariants))
 
 	app.mm = module.NewManager(
@@ -414,13 +427,15 @@ func NewNoisApp(
 		transfer.NewAppModule(app.TransferKeeper),
 		wasm.NewAppModule(appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper),
 		crisis.NewAppModule(&app.CrisisKeeper, skipGenesisInvariants),
+		allocation.NewAppModule(appCodec, app.AllocationKeeper),
 	)
 
 	app.mm.SetOrderBeginBlockers(
 		upgradetypes.ModuleName,
 		capabilitytypes.ModuleName,
 		minttypes.ModuleName,
-		// add alloc module here
+		// allocation module must run before distribution
+		allocationtypes.ModuleName,
 		distrtypes.ModuleName,
 		slashingtypes.ModuleName,
 		evidencetypes.ModuleName,
@@ -460,6 +475,7 @@ func NewNoisApp(
 		ibctransfertypes.ModuleName,
 		// add alloc module here
 		wasm.ModuleName,
+		allocationtypes.ModuleName,
 	)
 
 	app.mm.SetOrderInitGenesis(
@@ -483,7 +499,7 @@ func NewNoisApp(
 		ibctransfertypes.ModuleName,
 		// wasm after ibc transfer
 		wasm.ModuleName,
-		// add alloc module here
+		allocationtypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
@@ -513,6 +529,7 @@ func NewNoisApp(
 			WasmConfig:        &wasmConfig,
 			TXCounterStoreKey: keys[wasm.StoreKey],
 			Codec:             app.appCodec,
+			govKeeper:         app.GovKeeper,
 		},
 	)
 	if err != nil {
@@ -569,6 +586,7 @@ func KVStoreKeys() []string {
 		ibctransfertypes.StoreKey,
 		feegrant.StoreKey,
 		wasm.StoreKey,
+		allocationtypes.StoreKey,
 	}
 }
 
@@ -586,6 +604,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	paramsKeeper.Subspace(ibchost.ModuleName)
 	paramsKeeper.Subspace(wasm.ModuleName)
+	paramsKeeper.Subspace(allocationtypes.ModuleName)
 	return paramsKeeper
 }
 

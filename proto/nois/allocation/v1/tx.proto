@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package nois.allocation.v1;
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+option go_package = "github.com/noislabs/noisd/x/allocation/types";
+
+// Msg defines the allocation Msg service.
+service Msg {
+  rpc ClaimRewards(MsgClaimRewards) returns (MsgClaimRewardsResponse);
+}
+
+message MsgClaimRewards { string sender = 1; }
+
+message MsgClaimRewardsResponse {
+  // claimed rewards amount
+  repeated cosmos.base.v1beta1.Coin claimed_rewards = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false,
+    (gogoproto.moretags) = "yaml:\"claimed_rewards\""
+  ];
+}
