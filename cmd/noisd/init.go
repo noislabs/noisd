@@ -142,6 +142,9 @@ func InitCmd(mbm module.BasicManager, defaultNodeHome string) *cobra.Command {
 					return errors.Wrap(err, "Failed to read genesis doc from file")
 				}
 			}
+			// change genesis defaults
+			genDoc.ConsensusParams = types.DefaultConsensusParams()
+			genDoc.ConsensusParams.Block.MaxGas = 4_500_000
 
 			genDoc.ChainID = chainID
 			genDoc.Validators = nil
