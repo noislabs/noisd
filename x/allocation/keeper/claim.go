@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/noislabs/noisd/x/allocation/types"
 )
@@ -11,7 +9,7 @@ import (
 func (k Keeper) ClaimRewards(ctx sdk.Context, operator sdk.AccAddress) (sdk.Coins, error) {
 	rewardAmount := k.GetValidatorRewards(ctx, operator)
 	if rewardAmount == 0 {
-		return sdk.Coins{}, fmt.Errorf("no rewards to claim")
+		return sdk.Coins{}, types.ErrNoRewards
 	}
 	// send the rewards to the operator
 	reward := sdk.NewCoins(sdk.NewInt64Coin(k.stakingKeeper.BondDenom(ctx), rewardAmount))
