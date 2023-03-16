@@ -335,7 +335,7 @@ func MainnetGenesisParams() GenesisParams {
 
 	// staking
 	genParams.StakingParams = stakingtypes.DefaultParams()
-	genParams.StakingParams.UnbondingTime = time.Hour * 24 * 7 * 2 // 2 weeks
+	genParams.StakingParams.UnbondingTime = time.Hour * 24 * 7 * 3 // 21 days
 	genParams.StakingParams.MaxValidators = 45
 	genParams.StakingParams.BondDenom = genParams.NativeCoinMetadatas[0].Base
 
