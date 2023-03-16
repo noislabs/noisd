@@ -331,7 +331,7 @@ func MainnetGenesisParams() GenesisParams {
 	genParams.MintParams.InflationMax = sdk.NewDecWithPrec(20, 2)
 	genParams.MintParams.InflationMin = sdk.NewDecWithPrec(7, 2)
 	genParams.MintParams.GoalBonded = sdk.NewDecWithPrec(67, 2)
-	genParams.MintParams.BlocksPerYear = uint64(60 * 60 * 8766 / 5) // assuming 5 second block time
+	genParams.MintParams.BlocksPerYear = uint64(60 * 60 * 8766 / 2.5) // assuming 5 second block time
 
 	// staking
 	genParams.StakingParams = stakingtypes.DefaultParams()
