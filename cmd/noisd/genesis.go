@@ -353,7 +353,7 @@ func MainnetGenesisParams() GenesisParams {
 		sdk.NewInt(1_000_000_000),
 	))
 	genParams.GovParams.TallyParams.Quorum = sdk.MustNewDecFromStr("0.2") // 20%
-	genParams.GovParams.VotingParams.VotingPeriod = time.Hour * 24 * 3    // 3 days
+	genParams.GovParams.VotingParams.VotingPeriod = time.Hour * 24 * 4    // 4 days
 
 	// crisis make this  a high fee
 	genParams.CrisisConstantFee = sdk.NewCoin(
