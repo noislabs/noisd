@@ -1,12 +1,12 @@
 # Cross-build from Intel or ARM to x86_64. The node never uses an ARM build due to https://github.com/CosmWasm/cosmwasm/issues/1628
-#   Build:    docker buildx build --platform linux/amd64 --pull --tag noislabs/noisd:manual . --load
-#   Publish:  docker buildx build --platform linux/amd64 --pull --tag noislabs/noisd:0.0.0-lfg.1 . --push
+#   Build:    docker buildx build --platform linux/amd64 --pull --tag "noislabs/noisd:$(make version)" . --load
+#   Publish:  docker buildx build --platform linux/amd64 --pull --tag "noislabs/noisd:$(make version)" . --push
 #
 # Run
 #   show version:       docker run --rm noislabs/noisd:manual
 #   libwasmvm version:  docker run --rm noislabs/noisd:manual noisd query wasm libwasmvm-version
 #   shell:              docker run --rm -it noislabs/noisd:manual sh
-FROM golang:1.20.1-alpine3.17 AS go-builder
+FROM golang:1.20.2-alpine3.17 AS go-builder
 
 # this comes from standard alpine nightly file
 #  https://github.com/rust-lang/docker-rust-nightly/blob/master/alpine3.12/Dockerfile
