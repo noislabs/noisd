@@ -1,4 +1,4 @@
-.PHONY: build proto check_version install
+.PHONY: build proto check_go_version install
 #!/usr/bin/make -f
 
 PACKAGES_SIMTEST=$(shell go list ./... | grep '/simulation')
@@ -82,7 +82,7 @@ ifeq (,$(findstring nostrip,$(NOIS_BUILD_OPTIONS)))
   BUILD_FLAGS += -trimpath
 endif
 
-check_version:
+check_go_version:
 	@echo "Go version: $(GO_MAJOR_VERSION).$(GO_MINOR_VERSION)"
 ifneq ($(GO_MINOR_VERSION),20)
 	@echo "ERROR: Go version 1.20 is required for this version of Nois"
@@ -91,10 +91,10 @@ endif
 
 all: install
 
-install: check_version
+install: check_go_version
 	go install -mod=readonly $(BUILD_FLAGS) ./cmd/noisd
 
-build: check_version
+build: check_go_version
 	go build $(BUILD_FLAGS) -o build/noisd ./cmd/noisd
 
 go.sum: go.mod
@@ -150,3 +150,8 @@ proto-format:
 
 proto-swagger-gen:
 	@./scripts/protoc-swagger-gen.sh
+
+# Show the version that `make build` is using
+.PHONY: version
+version:
+	@echo "$(VERSION)"
