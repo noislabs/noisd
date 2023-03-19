@@ -83,9 +83,12 @@ ifeq (,$(findstring nostrip,$(NOIS_BUILD_OPTIONS)))
 endif
 
 check_go_version:
-	@echo "Go version: $(GO_MAJOR_VERSION).$(GO_MINOR_VERSION)"
-ifneq ($(GO_MINOR_VERSION),20)
-	@echo "ERROR: Go version 1.20 is required for this version of Nois"
+ifeq ($(GO_MINOR_VERSION),19)
+	@echo "Go version: $(GO_MAJOR_VERSION).$(GO_MINOR_VERSION). Ok."
+else ifeq ($(GO_MINOR_VERSION),20)
+	@echo "Go version: $(GO_MAJOR_VERSION).$(GO_MINOR_VERSION). Ok."
+else
+	@echo "ERROR: Go version 1.19 or 1.20 is required for this version of Nois"
 	exit 1
 endif
 
