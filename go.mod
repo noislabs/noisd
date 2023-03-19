@@ -1,6 +1,6 @@
 module github.com/noislabs/noisd
 
-go 1.20
+go 1.19
 
 require (
 	github.com/CosmWasm/wasmd v0.31.0
