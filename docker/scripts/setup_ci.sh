@@ -14,9 +14,9 @@ START_BALANCE="1000000000$TOKEN"
 echo "Creating genesis ..."
 rm -rf "${HOME}/.noisd"
 noisd init --chain-id "$CHAIN_ID" "$MONIKER"
-cd "${HOME}/.noisd"
+noisd prepare-genesis "$CHAIN_ID"
 
-sed -i "s/\"stake\"/\"$TOKEN\"/" config/genesis.json # staking/governance token is hardcoded in config, change this
+cd "${HOME}/.noisd"
 
 # this is essential for sub-1s block times (or header times go crazy)
 sed -i 's/"time_iota_ms": "1000"/"time_iota_ms": "10"/' config/genesis.json
