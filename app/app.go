@@ -399,6 +399,7 @@ func NewNoisApp(
 		app.AccountKeeper,
 		app.BankKeeper,
 		app.StakingKeeper,
+		app.DistrKeeper,
 		app.GetSubspace(allocationtypes.ModuleName),
 	)
 

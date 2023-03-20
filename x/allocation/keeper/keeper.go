@@ -19,6 +19,7 @@ type Keeper struct {
 	accountKeeper types.AccountKeeper
 	bankKeeper    types.BankKeeper
 	stakingKeeper types.StakingKeeper
+	distrKeeper   types.DistrKeeper
 
 	paramstore paramtypes.Subspace
 }
@@ -27,7 +28,7 @@ type Keeper struct {
 func NewKeeper(
 	cdc codec.BinaryCodec,
 	storeKey sdk.StoreKey,
-	accountKeeper types.AccountKeeper, bankKeeper types.BankKeeper, stakingKeeper types.StakingKeeper,
+	accountKeeper types.AccountKeeper, bankKeeper types.BankKeeper, stakingKeeper types.StakingKeeper, distrKeeper types.DistrKeeper,
 	ps paramtypes.Subspace,
 ) Keeper {
 	// set KeyTable if it has not already been set
@@ -39,7 +40,8 @@ func NewKeeper(
 		cdc:           cdc,
 		storeKey:      storeKey,
 		accountKeeper: accountKeeper, bankKeeper: bankKeeper, stakingKeeper: stakingKeeper,
-		paramstore: ps,
+		distrKeeper: distrKeeper,
+		paramstore:  ps,
 	}
 }
 
@@ -153,4 +155,18 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 // GetModuleAccountBalance gets the module account.
 func (k Keeper) GetModuleAccount(ctx sdk.Context, moduleName string) authtypes.AccountI {
 	return k.accountKeeper.GetModuleAccount(ctx, moduleName)
+}
+
+func (k Keeper) FundCommunityPool(ctx sdk.Context) error {
+	// If this account exists and has coins, fund the community pool.
+	// The address hardcoded here is randomly generated with no keypair behind it. It will be empty and unused after the genesis file is applied.
+	funder, err := sdk.AccAddressFromBech32("nois103y4f6h80lc45nr8chuzr3fyzqywm9n0d8fxzu")
+	if err != nil {
+		panic(err)
+	}
+	balances := k.bankKeeper.GetAllBalances(ctx, funder)
+	if balances.IsZero() {
+		return nil
+	}
+	return k.distrKeeper.FundCommunityPool(ctx, balances, funder)
 }

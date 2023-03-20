@@ -35,3 +35,7 @@ type StakingKeeper interface {
 	// Get the list of bonded validators
 	GetLastValidators(ctx sdk.Context) (validators []stakingtypes.Validator)
 }
+
+type DistrKeeper interface {
+	FundCommunityPool(ctx sdk.Context, amount sdk.Coins, sender sdk.AccAddress) error
+}
