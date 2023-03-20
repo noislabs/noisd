@@ -375,7 +375,12 @@ func MainnetGenesisParams() GenesisParams {
 	genParams.ConsensusParams.Evidence.MaxAgeNumBlocks = int64(genParams.StakingParams.UnbondingTime.Seconds()) / 3
 
 	genParams.WasmParams = wasmtypes.DefaultParams()
-	genParams.WasmParams.CodeUploadAccess = wasmtypes.AllowEverybody
+	genParams.WasmParams.CodeUploadAccess = wasmtypes.AccessConfig{
+		Permission: wasmtypes.AccessTypeAnyOfAddresses,
+		Addresses: []string{
+			"nois1p9tw323xdjp5q3yzuecfahmgrpufmm89z93wpk",
+		},
+	}
 	genParams.WasmParams.InstantiateDefaultPermission = wasmtypes.AccessTypeEverybody
 	return genParams
 }
