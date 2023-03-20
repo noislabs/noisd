@@ -327,7 +327,9 @@ func MainnetGenesisParams() GenesisParams {
 
 	// mint
 	// inflation value used for: initial, min and max.
-	inflation := sdk.NewDecWithPrec(20, 2) // 20%
+	// The network starts with 0 inflation and then changes to 20%
+	// once the Icecube Delegation Program made the delegations.
+	inflation := sdk.ZeroDec()
 
 	genParams.MinterConfig = minttypes.DefaultInitialMinter()
 	genParams.MinterConfig.Inflation = inflation
