@@ -158,7 +158,8 @@ func (k Keeper) GetModuleAccount(ctx sdk.Context, moduleName string) authtypes.A
 }
 
 func (k Keeper) FundCommunityPool(ctx sdk.Context) error {
-	// If this account exists and has coins, fund the community pool
+	// If this account exists and has coins, fund the community pool.
+	// The address hardcoded here is randomly generated with no keypair behind it. It will be empty and unused after the genesis file is applied.
 	funder, err := sdk.AccAddressFromBech32("nois103y4f6h80lc45nr8chuzr3fyzqywm9n0d8fxzu")
 	if err != nil {
 		panic(err)
