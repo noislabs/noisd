@@ -327,7 +327,7 @@ func MainnetGenesisParams() GenesisParams {
 	genParams.MintParams = minttypes.DefaultParams()
 	genParams.MintParams.MintDenom = BaseCoinUnit
 	//  default mint params change accordingly
-	genParams.MintParams.InflationRateChange = sdk.NewDecWithPrec(100, 2)
+	genParams.MintParams.InflationRateChange = sdk.OneDec()
 	genParams.MintParams.InflationMax = sdk.NewDecWithPrec(20, 2)
 	genParams.MintParams.InflationMin = sdk.NewDecWithPrec(20, 2)
 	genParams.MintParams.GoalBonded = sdk.NewDecWithPrec(67, 2)
