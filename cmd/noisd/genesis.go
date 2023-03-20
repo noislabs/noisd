@@ -327,7 +327,7 @@ func MainnetGenesisParams() GenesisParams {
 	genParams.MintParams = minttypes.DefaultParams()
 	genParams.MintParams.MintDenom = BaseCoinUnit
 	//  default mint params change accordingly
-	genParams.MintParams.InflationRateChange = sdk.NewDecWithPrec(13, 2)
+	genParams.MintParams.InflationRateChange = sdk.NewDecWithPrec(100, 2)
 	genParams.MintParams.InflationMax = sdk.NewDecWithPrec(20, 2)
 	genParams.MintParams.InflationMin = sdk.NewDecWithPrec(20, 2)
 	genParams.MintParams.GoalBonded = sdk.NewDecWithPrec(67, 2)
@@ -340,8 +340,8 @@ func MainnetGenesisParams() GenesisParams {
 	genParams.StakingParams.BondDenom = genParams.NativeCoinMetadatas[0].Base
 
 	genParams.DistributionParams = distributiontypes.DefaultParams()
-	genParams.DistributionParams.BaseProposerReward = sdk.MustNewDecFromStr("0.01")
-	genParams.DistributionParams.BonusProposerReward = sdk.MustNewDecFromStr("0.04")
+	genParams.DistributionParams.BaseProposerReward = sdk.ZeroDec()
+	genParams.DistributionParams.BonusProposerReward = sdk.ZeroDec()
 	// according to tokenomics this should be 0
 	genParams.DistributionParams.CommunityTax = sdk.ZeroDec()
 	genParams.DistributionParams.WithdrawAddrEnabled = true
