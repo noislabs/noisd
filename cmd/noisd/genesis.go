@@ -57,7 +57,8 @@ type GenesisParams struct {
 
 	AllocationParams allocationtypes.Params
 
-	MintParams minttypes.Params
+	MintParams   minttypes.Params
+	MinterConfig minttypes.Minter
 
 	WasmParams wasmtypes.Params
 }
@@ -162,6 +163,7 @@ func PrepareGenesis(
 
 	// mint module genesis
 	mintGenState := minttypes.DefaultGenesisState()
+	mintGenState.Minter = genesisParams.MinterConfig
 	mintGenState.Params = genesisParams.MintParams
 
 	mintGenStateBz, err := cdc.MarshalJSON(mintGenState)
@@ -324,6 +326,9 @@ func MainnetGenesisParams() GenesisParams {
 	genParams.AllocationParams.RandomnessRewardsReceiver = ""
 
 	// mint
+	genParams.MinterConfig = minttypes.DefaultInitialMinter()
+	genParams.MinterConfig.Inflation = sdk.NewDecWithPrec(20, 2) // 20%
+
 	genParams.MintParams = minttypes.DefaultParams()
 	genParams.MintParams.MintDenom = BaseCoinUnit
 	//  default mint params change accordingly
