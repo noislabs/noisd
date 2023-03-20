@@ -57,7 +57,8 @@ type GenesisParams struct {
 
 	AllocationParams allocationtypes.Params
 
-	MintParams minttypes.Params
+	MintParams   minttypes.Params
+	MinterConfig minttypes.Minter
 
 	WasmParams wasmtypes.Params
 }
@@ -162,6 +163,7 @@ func PrepareGenesis(
 
 	// mint module genesis
 	mintGenState := minttypes.DefaultGenesisState()
+	mintGenState.Minter = genesisParams.MinterConfig
 	mintGenState.Params = genesisParams.MintParams
 
 	mintGenStateBz, err := cdc.MarshalJSON(mintGenState)
@@ -324,12 +326,18 @@ func MainnetGenesisParams() GenesisParams {
 	genParams.AllocationParams.RandomnessRewardsReceiver = ""
 
 	// mint
+	// inflation value used for: initial, min and max.
+	inflation := sdk.NewDecWithPrec(20, 2) // 20%
+
+	genParams.MinterConfig = minttypes.DefaultInitialMinter()
+	genParams.MinterConfig.Inflation = inflation
+
 	genParams.MintParams = minttypes.DefaultParams()
 	genParams.MintParams.MintDenom = BaseCoinUnit
 	//  default mint params change accordingly
 	genParams.MintParams.InflationRateChange = sdk.OneDec()
-	genParams.MintParams.InflationMax = sdk.NewDecWithPrec(20, 2)
-	genParams.MintParams.InflationMin = sdk.NewDecWithPrec(20, 2)
+	genParams.MintParams.InflationMin = inflation
+	genParams.MintParams.InflationMax = inflation
 	genParams.MintParams.GoalBonded = sdk.NewDecWithPrec(67, 2)
 	genParams.MintParams.BlocksPerYear = uint64(60 * 60 * 8766 / 2.5) // assuming 2.5 second block time
 
