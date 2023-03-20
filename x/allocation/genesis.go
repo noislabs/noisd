@@ -19,6 +19,10 @@ func InitGenesis(ctx sdk.Context,
 	validatorRewardsPool := k.GetModuleAccount(ctx, types.ValidatorRewardsPool)
 	k.GetModuleAccount(ctx, types.ModuleName)
 	k.SetParams(ctx, genState.Params)
+	err := k.FundCommunityPool(ctx)
+	if err != nil {
+		panic(err)
+	}
 	bondDenom := stakingKeeper.BondDenom(ctx)
 	totalRewards := sdk.NewInt(0)
 	for _, reward := range genState.ValidatorRewards {
