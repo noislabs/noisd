@@ -61,8 +61,8 @@ func Bech32DecodeCmd() *cobra.Command {
 Example:
 	noisd debug bech32-decode cosmos18afy9mwgrmtpsl4vhgfvq0r3knm4tw2yftqlpg
 	noisd debug bech32-decode 3F5242EDC81ED6187EACBA12C03C71B4F755B944
-	noisd debug bech32-encode nois18afy9mwgrmtpsl4vhgfvq0r3knm4tw2ycra4ds
-	noisd debug bech32-encode noisvaloper18afy9mwgrmtpsl4vhgfvq0r3knm4tw2yer055y
+	noisd debug bech32-decode nois18afy9mwgrmtpsl4vhgfvq0r3knm4tw2ycra4ds
+	noisd debug bech32-decode noisvaloper18afy9mwgrmtpsl4vhgfvq0r3knm4tw2yer055y
 	`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
