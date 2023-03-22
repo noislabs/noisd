@@ -66,7 +66,6 @@ Example:
 	`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-
 			addrString := args[0]
 
 			// bytes of the parsed address
