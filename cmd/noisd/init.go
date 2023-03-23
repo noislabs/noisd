@@ -112,8 +112,8 @@ func InitCmd(mbm module.BasicManager, defaultNodeHome string) *cobra.Command {
 			config.RPC.CORSAllowedOrigins = []string{"*"}
 
 			// Peer settings
-			config.P2P.MaxNumInboundPeers = 80
-			config.P2P.MaxNumOutboundPeers = 40
+			config.P2P.MaxNumInboundPeers = 70
+			config.P2P.MaxNumOutboundPeers = 70
 
 			// Consensus settings
 			config.Consensus.TimeoutPropose = 2000 * time.Millisecond
