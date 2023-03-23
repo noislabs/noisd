@@ -93,9 +93,6 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 }
 
 func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
-	debugCmd := debug.Cmd()
-	debugCmd.AddCommand(Bech32EncodeCmd())
-	debugCmd.AddCommand(Bech32DecodeCmd())
 
 	rootCmd.AddCommand(
 		InitCmd(app.ModuleBasics, app.DefaultNodeHome),
@@ -104,9 +101,10 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 		genutilcli.ValidateGenesisCmd(app.ModuleBasics),
 		AddGenesisAccountCmd(app.DefaultNodeHome),
 		tmcli.NewCompletionCmd(rootCmd, true),
-		debugCmd,
+		debug.Cmd(),
 		config.Cmd(),
 		PrepareGenesisCmd(app.DefaultNodeHome, app.ModuleBasics),
+		Bech32Cmd(),
 	)
 
 	ac := appCreator{
