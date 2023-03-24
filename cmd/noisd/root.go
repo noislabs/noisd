@@ -106,6 +106,7 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 		debug.Cmd(),
 		config.Cmd(),
 		PrepareGenesisCmd(app.DefaultNodeHome, app.ModuleBasics),
+		Bech32Cmd(),
 	)
 
 	ac := appCreator{
