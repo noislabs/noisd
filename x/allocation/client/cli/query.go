@@ -83,5 +83,6 @@ func GetCmdQueryClaimableRewards() *cobra.Command {
 			return clientCtx.PrintProto(res)
 		},
 	}
+	flags.AddQueryFlagsToCmd(cmd)
 	return cmd
 }
