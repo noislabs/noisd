@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/types/bech32"
 
 	"github.com/spf13/cobra"
 
@@ -70,7 +71,7 @@ func GetCmdQueryClaimableRewards() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			address, err := sdk.AccAddressFromBech32(args[0])
+			address, err := GetFromBech32(args[0])
 			if err != nil {
 				return err
 			}
@@ -85,4 +86,20 @@ func GetCmdQueryClaimableRewards() *cobra.Command {
 	}
 	flags.AddQueryFlagsToCmd(cmd)
 	return cmd
+}
+
+// GetFromBech32 returns an sdk.AccAddress from a Bech32 string.
+func GetFromBech32(bech32str string) (sdk.AccAddress, error) {
+	if len(bech32str) == 0 {
+		return nil, fmt.Errorf("bech32 string is empty")
+	}
+	_, bz, err := bech32.DecodeAndConvert(bech32str)
+	if err != nil {
+		return nil, err
+	}
+	err = sdk.VerifyAddressFormat(bz)
+	if err != nil {
+		return nil, err
+	}
+	return sdk.AccAddress(bz), nil
 }
