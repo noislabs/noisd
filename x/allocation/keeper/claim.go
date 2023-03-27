@@ -19,5 +19,12 @@ func (k Keeper) ClaimRewards(ctx sdk.Context, operator sdk.AccAddress) (sdk.Coin
 	}
 	// remove the rewards from the store
 	k.DeleteValidatorRewards(ctx, operator)
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeWithdrawRewards,
+			sdk.NewAttribute(sdk.AttributeKeySender, operator.String()),
+			sdk.NewAttribute(sdk.AttributeKeyAmount, reward.String()),
+		),
+	})
 	return reward, nil
 }
