@@ -17,6 +17,13 @@ func (server msgServer) ClaimRewards(goCtx context.Context, msg *types.MsgClaimR
 	if err != nil {
 		return nil, err
 	}
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			sdk.EventTypeMessage,
+			sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
+		),
+	})
 	return &types.MsgClaimRewardsResponse{
 		ClaimedRewards: coins,
 	}, nil
