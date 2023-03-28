@@ -18,9 +18,6 @@ noisd prepare-genesis "$CHAIN_ID"
 
 cd "${HOME}/.noisd"
 
-# this is essential for sub-1s block times (or header times go crazy)
-sed -i 's/"time_iota_ms": "1000"/"time_iota_ms": "10"/' config/genesis.json
-
 echo "Setting up validator ..."
 if ! noisd keys show validator 2>/dev/null; then
   echo "Validator does not yet exist. Creating it ..."

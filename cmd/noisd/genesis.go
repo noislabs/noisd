@@ -39,6 +39,7 @@ const (
 	NoisExponent        = 6
 	Bech32PrefixAccAddr = "nois"
 	flagGenesisTime     = "genesis-time"
+	flagMainnet         = "mainnet"
 )
 
 type GenesisParams struct {
@@ -72,9 +73,13 @@ Examples include:
 	- Setting module initial params
 	- Setting denom metadata
 Example:
-	noisd prepare-genesis nois-1
+	noisd prepare-genesis nois-testnet-005
 	- Check input genesis:
-		file is at ~/.nois/config/genesis.json
+		file is at ~/.noisd/config/genesis.json
+
+	noisd prepare-genesis --mainnet nois-1
+	- Check input genesis:
+		file is at ~/.noisd/config/genesis.json
 `,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -93,7 +98,13 @@ Example:
 			}
 
 			// get genesis params
-			genesisParams := MainnetGenesisParams()
+			var genesisParams GenesisParams
+			mainnet, _ := cmd.Flags().GetBool(flagMainnet)
+			if mainnet {
+				genesisParams = MainnetGenesisParams()
+			} else {
+				genesisParams = TestnetGenesisParams()
+			}
 
 			genesisTime, _ := cmd.Flags().GetString(flagGenesisTime)
 			if genesisTime != "" {
@@ -132,6 +143,7 @@ Example:
 
 	cmd.Flags().String(flags.FlagHome, defaultNodeHome, "The application home directory")
 	cmd.Flags().String(flagGenesisTime, "", "Genesis start time")
+	cmd.Flags().Bool(flagMainnet, false, "Generate for Mainnet. If not set, generate for Testnet")
 	flags.AddQueryFlagsToCmd(cmd)
 
 	return cmd
@@ -392,5 +404,24 @@ func MainnetGenesisParams() GenesisParams {
 		},
 	}
 	genParams.WasmParams.InstantiateDefaultPermission = wasmtypes.AccessTypeEverybody
+	return genParams
+}
+
+func TestnetGenesisParams() GenesisParams {
+	genParams := MainnetGenesisParams()
+
+	// Allow sub-second block times in testnets
+	genParams.ConsensusParams.Block.TimeIotaMs = 100
+
+	// 20 % inflation from the start
+	inflation := sdk.MustNewDecFromStr("0.2")
+	genParams.MinterConfig.Inflation = inflation
+	genParams.MintParams.InflationMin = inflation
+	genParams.MintParams.InflationMax = inflation
+
+	// Permissionless CosmWasm
+	genParams.WasmParams.CodeUploadAccess = wasmtypes.AccessConfig{
+		Permission: wasmtypes.AccessTypeEverybody,
+	}
 	return genParams
 }
