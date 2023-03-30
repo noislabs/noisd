@@ -112,8 +112,14 @@ func InitCmd(mbm module.BasicManager, defaultNodeHome string) *cobra.Command {
 			config.RPC.CORSAllowedOrigins = []string{"*"}
 
 			// Peer settings
-			config.P2P.MaxNumInboundPeers = 70
-			config.P2P.MaxNumOutboundPeers = 70
+			//
+			// Using a higher number for inbound peers ensures that there are always
+			// open slots for newcomers. Also the network needs to account for nodes that
+			// have not configured incoming connections correctly (e.g. closed firewall, wrong
+			// external address). If the number of inbound peers is smaller or equal to outbound,
+			// it is very easy for small closed circles to form with all slots taken.
+			config.P2P.MaxNumInboundPeers = 80
+			config.P2P.MaxNumOutboundPeers = 50
 
 			// Consensus settings
 			config.Consensus.TimeoutPropose = 2000 * time.Millisecond
