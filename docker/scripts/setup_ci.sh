@@ -8,8 +8,7 @@ MONIKER=${MONIKER:-nois-moniker}
 
 TOKEN=${TOKEN:-unois}
 
-# both types of tokens
-START_BALANCE="1000000000$TOKEN"
+START_BALANCE="1000000000000$TOKEN" # 1 million NOIS
 
 echo "Creating genesis ..."
 rm -rf "${HOME}/.noisd"
@@ -55,7 +54,12 @@ jq -S -M . < config/genesis.json > genesis.tmp
 mv genesis.tmp config/genesis.json
 chmod a+rx config/genesis.json
 
-# Custom settings in config.toml
+# blocks_per_year is 10x the mainnet value (0.25s block times)
+UPDATED=$(jq '.app_state.mint.params.blocks_per_year = "126230400"' config/genesis.json) \
+  && echo "$UPDATED" > config/genesis.json
+
+# Custom settings for very fast blocks in CI
+# We target 250ms block times with one validator.
 sed -i"" \
   -e 's/^timeout_propose =.*$/timeout_propose = "100ms"/' \
   -e 's/^timeout_propose_delta =.*$/timeout_propose_delta = "100ms"/' \
@@ -63,5 +67,5 @@ sed -i"" \
   -e 's/^timeout_prevote_delta =.*$/timeout_prevote_delta = "100ms"/' \
   -e 's/^timeout_precommit =.*$/timeout_precommit = "100ms"/' \
   -e 's/^timeout_precommit_delta =.*$/timeout_precommit_delta = "100ms"/' \
-  -e 's/^timeout_commit =.*$/timeout_commit = "200ms"/' \
+  -e 's/^timeout_commit =.*$/timeout_commit = "230ms"/' \
   "config/config.toml"
