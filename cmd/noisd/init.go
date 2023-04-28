@@ -118,7 +118,7 @@ func InitCmd(mbm module.BasicManager, defaultNodeHome string) *cobra.Command {
 			// have not configured incoming connections correctly (e.g. closed firewall, wrong
 			// external address). If the number of inbound peers is smaller or equal to outbound,
 			// it is very easy for small closed circles to form with all slots taken.
-			config.P2P.MaxNumInboundPeers = 80
+			config.P2P.MaxNumInboundPeers = 100
 			config.P2P.MaxNumOutboundPeers = 50
 
 			// Consensus settings
