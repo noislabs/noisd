@@ -16,7 +16,7 @@ jobs:
           name: Check libwasmvm version
           command: |
             LIBWASMVM_VERSION=$(./build/noisd query wasm libwasmvm-version)
-            if [[ "$LIBWASMVM_VERSION" != "1.2.3" ]] ; then
+            if [[ "$LIBWASMVM_VERSION" != "1.2.5" ]] ; then
               echo "Got unexpected libwasmvm version: $LIBWASMVM_VERSION"
               exit 1
             fi
