@@ -87,8 +87,10 @@ ifeq ($(GO_MINOR_VERSION),19)
 	@echo "Go version: $(GO_MAJOR_VERSION).$(GO_MINOR_VERSION). Ok."
 else ifeq ($(GO_MINOR_VERSION),20)
 	@echo "Go version: $(GO_MAJOR_VERSION).$(GO_MINOR_VERSION). Ok."
+else ifeq ($(GO_MINOR_VERSION),21)
+	@echo "Go version: $(GO_MAJOR_VERSION).$(GO_MINOR_VERSION). Ok."
 else
-	@echo "ERROR: Go version 1.19 or 1.20 is required for this version of Nois"
+	@echo "ERROR: Go version 1.19, 1.20 or 1.21 is required for this version of Nois"
 	exit 1
 endif
 
