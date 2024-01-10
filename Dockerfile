@@ -23,11 +23,11 @@ RUN APK_ARCH="$(apk --print-arch)"; \
   echo "Detected architecture: $APK_ARCH"; \
   case "$APK_ARCH" in \
     aarch64) \
-      wget -O /lib/libwasmvm_muslc.a https://github.com/CosmWasm/wasmvm/releases/download/v1.2.3/libwasmvm_muslc.aarch64.a \
-        && sha256sum /lib/libwasmvm_muslc.a | grep d6904bc0082d6510f1e032fc1fd55ffadc9378d963e199afe0f93dd2667c0160 ;; \
+      wget -O /lib/libwasmvm_muslc.a https://github.com/CosmWasm/wasmvm/releases/download/v1.2.6/libwasmvm_muslc.aarch64.a \
+        && sha256sum /lib/libwasmvm_muslc.a | grep 1014ebcce48bd7b019f66798ec8dbb42b383f324038296c64de35bdbf5f28243 ;; \
     x86_64) \
-      wget -O /lib/libwasmvm_muslc.a https://github.com/CosmWasm/wasmvm/releases/download/v1.2.3/libwasmvm_muslc.x86_64.a \
-        && sha256sum /lib/libwasmvm_muslc.a | grep bb8ffda690b15765c396266721e45516cb3021146fd4de46f7daeda5b0d82c86 ;; \
+      wget -O /lib/libwasmvm_muslc.a https://github.com/CosmWasm/wasmvm/releases/download/v1.2.6/libwasmvm_muslc.x86_64.a \
+        && sha256sum /lib/libwasmvm_muslc.a | grep d93b02f34d2da0aa7f20786add8abdca8224334db541f954d28fad64641b9136 ;; \
   esac;
 
 WORKDIR /code
