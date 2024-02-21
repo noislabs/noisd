@@ -23,8 +23,6 @@ protoc_install_proto_gen_doc
 echo "Generating proto docs"
 buf generate --template buf.gen.doc.yaml
 
-ls -ltrah 
-pwd
 cd ..
 
 # move proto files to the right places

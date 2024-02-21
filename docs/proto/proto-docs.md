@@ -43,7 +43,7 @@
 <a name="nois.allocation.v1.DistributionProportions"></a>
 
 ### DistributionProportions
-
+DistributionProportions defines the allocation distribution structure.
 
 
 | Field | Type | Label | Description |
@@ -60,7 +60,7 @@
 <a name="nois.allocation.v1.Params"></a>
 
 ### Params
-
+Params module params.
 
 
 | Field | Type | Label | Description |
@@ -77,7 +77,7 @@
 <a name="nois.allocation.v1.WeightedAddress"></a>
 
 ### WeightedAddress
-
+WeightedAddress defines the weight given to an address.
 
 
 | Field | Type | Label | Description |
@@ -109,7 +109,7 @@
 <a name="nois.allocation.v1.ValidatorReward"></a>
 
 ### ValidatorReward
-
+ValidatorReward defines the validator rewards structure.
 
 
 | Field | Type | Label | Description |
@@ -173,7 +173,7 @@ GenesisState defines the allocation module's genesis state.
 <a name="nois.allocation.v1.QueryClaimableRewardsRequest"></a>
 
 ### QueryClaimableRewardsRequest
-
+QueryClaimableRewardsRequest claimable rewards request.
 
 
 | Field | Type | Label | Description |
@@ -188,7 +188,7 @@ GenesisState defines the allocation module's genesis state.
 <a name="nois.allocation.v1.QueryClaimableRewardsResponse"></a>
 
 ### QueryClaimableRewardsResponse
-
+QueryClaimableRewardsResponse claimable rewards response.
 
 
 | Field | Type | Label | Description |
@@ -238,8 +238,8 @@ Query defines the gRPC querier service.
 
 | Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
 | ----------- | ------------ | ------------- | ------------| ------- | -------- |
-| `Params` | [QueryParamsRequest](#nois.allocation.v1.QueryParamsRequest) | [QueryParamsResponse](#nois.allocation.v1.QueryParamsResponse) |  | GET|/nois/alocation/v1/params|
-| `ClaimableRewards` | [QueryClaimableRewardsRequest](#nois.allocation.v1.QueryClaimableRewardsRequest) | [QueryClaimableRewardsResponse](#nois.allocation.v1.QueryClaimableRewardsResponse) |  | GET|/nois/alocation/v1/claimable_rewards|
+| `Params` | [QueryParamsRequest](#nois.allocation.v1.QueryParamsRequest) | [QueryParamsResponse](#nois.allocation.v1.QueryParamsResponse) | Params returns the module params. | GET|/nois/alocation/v1/params|
+| `ClaimableRewards` | [QueryClaimableRewardsRequest](#nois.allocation.v1.QueryClaimableRewardsRequest) | [QueryClaimableRewardsResponse](#nois.allocation.v1.QueryClaimableRewardsResponse) | ClaimableRewards returns how many rewards accumulated by an address. | GET|/nois/alocation/v1/claimable_rewards|
 
  <!-- end services -->
 
@@ -255,7 +255,7 @@ Query defines the gRPC querier service.
 <a name="nois.allocation.v1.MsgClaimRewards"></a>
 
 ### MsgClaimRewards
-
+MsgClaimRewards defines the claim rewards message.
 
 
 | Field | Type | Label | Description |
@@ -270,7 +270,7 @@ Query defines the gRPC querier service.
 <a name="nois.allocation.v1.MsgClaimRewardsResponse"></a>
 
 ### MsgClaimRewardsResponse
-
+MsgClaimRewardsResponse defines the claim rewards response.
 
 
 | Field | Type | Label | Description |
@@ -295,7 +295,7 @@ Msg defines the allocation Msg service.
 
 | Method Name | Request Type | Response Type | Description | HTTP Verb | Endpoint |
 | ----------- | ------------ | ------------- | ------------| ------- | -------- |
-| `ClaimRewards` | [MsgClaimRewards](#nois.allocation.v1.MsgClaimRewards) | [MsgClaimRewardsResponse](#nois.allocation.v1.MsgClaimRewardsResponse) |  | |
+| `ClaimRewards` | [MsgClaimRewards](#nois.allocation.v1.MsgClaimRewards) | [MsgClaimRewardsResponse](#nois.allocation.v1.MsgClaimRewardsResponse) | ClaimRewards method for claiming validator rewards. | |
 
  <!-- end services -->
 
