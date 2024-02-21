@@ -15,16 +15,17 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/debug"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/keys"
+	"github.com/cosmos/cosmos-sdk/client/pruning"
 	"github.com/cosmos/cosmos-sdk/client/rpc"
 	"github.com/cosmos/cosmos-sdk/server"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/cosmos/cosmos-sdk/snapshots"
+	snapshottypes "github.com/cosmos/cosmos-sdk/snapshots/types"
 	"github.com/cosmos/cosmos-sdk/store"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/version"
 	authcmd "github.com/cosmos/cosmos-sdk/x/auth/client/cli"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/cosmos/cosmos-sdk/x/crisis"
 	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
 	"github.com/prometheus/client_golang/prometheus"
@@ -34,6 +35,8 @@ import (
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
+	tmcfg "github.com/cometbft/cometbft/config"
+	cmttypes "github.com/cometbft/cometbft/types"
 	"github.com/noislabs/noisd/app"
 	"github.com/noislabs/noisd/app/params"
 )
@@ -86,7 +89,8 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 				return err
 			}
 			customTemplate, customParams := params.DefaultConfig()
-			return server.InterceptConfigsPreRunHandler(cmd, customTemplate, customParams)
+			tmconfig := tmcfg.DefaultConfig()
+			return server.InterceptConfigsPreRunHandler(cmd, customTemplate, customParams, tmconfig)
 		},
 	}
 
@@ -97,22 +101,15 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 
 func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 	rootCmd.AddCommand(
-		InitCmd(app.ModuleBasics, app.DefaultNodeHome),
-		genutilcli.CollectGenTxsCmd(banktypes.GenesisBalancesIterator{}, app.DefaultNodeHome),
-		genutilcli.GenTxCmd(app.ModuleBasics, encodingConfig.TxConfig, banktypes.GenesisBalancesIterator{}, app.DefaultNodeHome),
-		genutilcli.ValidateGenesisCmd(app.ModuleBasics),
-		AddGenesisAccountCmd(app.DefaultNodeHome),
+		genutilcli.InitCmd(app.ModuleBasics, app.DefaultNodeHome),
 		tmcli.NewCompletionCmd(rootCmd, true),
 		debug.Cmd(),
 		config.Cmd(),
-		PrepareGenesisCmd(app.DefaultNodeHome, app.ModuleBasics),
 		Bech32Cmd(),
+		pruning.PruningCmd(newApp),
 	)
 
-	ac := appCreator{
-		encCfg: encodingConfig,
-	}
-	server.AddCommands(rootCmd, app.DefaultNodeHome, ac.newApp, ac.appExport, addModuleInitFlags)
+	server.AddCommands(rootCmd, app.DefaultNodeHome, newApp, appExport, addModuleInitFlags)
 
 	// add keybase, auxiliary RPC, query, and tx child commands
 	rootCmd.AddCommand(
@@ -179,11 +176,7 @@ func txCommand() *cobra.Command {
 	return cmd
 }
 
-type appCreator struct {
-	encCfg params.EncodingConfig
-}
-
-func (ac appCreator) newApp(
+func newApp(
 	logger log.Logger,
 	db dbm.DB,
 	traceStore io.Writer,
@@ -206,7 +199,7 @@ func (ac appCreator) newApp(
 	}
 
 	snapshotDir := filepath.Join(cast.ToString(appOpts.Get(flags.FlagHome)), "data", "snapshots")
-	snapshotDB, err := sdk.NewLevelDB("metadata", snapshotDir)
+	snapshotDB, err := dbm.NewDB("metadata", server.GetAppDBBackend(appOpts), snapshotDir)
 	if err != nil {
 		panic(err)
 	}
@@ -214,21 +207,34 @@ func (ac appCreator) newApp(
 	if err != nil {
 		panic(err)
 	}
-	var wasmOpts []wasm.Option
+	var wasmOpts []wasmkeeper.Option
 	if cast.ToBool(appOpts.Get("telemetry.enabled")) {
 		wasmOpts = append(wasmOpts, wasmkeeper.WithVMCacheMetrics(prometheus.DefaultRegisterer))
 	}
 
 	iavlCacheSize := int(cast.ToUint64(appOpts.Get("iavl-cache-size")))
 	if iavlCacheSize == 0 {
-		iavlCacheSize = 390_625 // 50mb
+		iavlCacheSize = 781_250
 	}
 
+	homeDir := cast.ToString(appOpts.Get(flags.FlagHome))
+	chainID := cast.ToString(appOpts.Get(flags.FlagChainID))
+	if chainID == "" {
+		// fallback to genesis chain-id
+		appGenesis, err := cmttypes.GenesisDocFromFile(filepath.Join(homeDir, "config", "genesis.json"))
+		if err != nil {
+			panic(err)
+		}
+		chainID = appGenesis.ChainID
+	}
+
+	// TODO: swtich to default base options
+	// server.DefaultBaseappOptions(appOpts)
+	encCfg := app.MakeEncodingConfig()
 	return app.NewNoisApp(logger, db, traceStore, true, skipUpgradeHeights,
 		cast.ToString(appOpts.Get(flags.FlagHome)),
 		cast.ToUint(appOpts.Get(server.FlagInvCheckPeriod)),
-		ac.encCfg,
-		app.GetWasmEnabledProposals(),
+		encCfg,
 		appOpts,
 		wasmOpts,
 		baseapp.SetPruning(pruningOpts),
@@ -239,14 +245,14 @@ func (ac appCreator) newApp(
 		baseapp.SetInterBlockCache(cache),
 		baseapp.SetTrace(cast.ToBool(appOpts.Get(server.FlagTrace))),
 		baseapp.SetIndexEvents(cast.ToStringSlice(appOpts.Get(server.FlagIndexEvents))),
-		baseapp.SetSnapshotStore(snapshotStore),
-		baseapp.SetSnapshotInterval(cast.ToUint64(appOpts.Get(server.FlagStateSyncSnapshotInterval))),
-		baseapp.SetSnapshotKeepRecent(cast.ToUint32(appOpts.Get(server.FlagStateSyncSnapshotKeepRecent))),
+		baseapp.SetSnapshot(snapshotStore, snapshottypes.SnapshotOptions{Interval: cast.ToUint64(appOpts.Get(server.FlagStateSyncSnapshotInterval)), KeepRecent: cast.ToUint32(appOpts.Get(server.FlagStateSyncSnapshotKeepRecent))}),
 		baseapp.SetIAVLCacheSize(iavlCacheSize),
+		baseapp.SetIAVLDisableFastNode(true),
+		baseapp.SetChainID(chainID),
 	)
 }
 
-func (ac appCreator) appExport(
+func appExport(
 	logger log.Logger,
 	db dbm.DB,
 	traceStore io.Writer,
@@ -254,6 +260,7 @@ func (ac appCreator) appExport(
 	forZeroHeight bool,
 	jailAllowedAddrs []string,
 	appOpts servertypes.AppOptions,
+	modulesToExport []string,
 ) (servertypes.ExportedApp, error) {
 	var noisApp *app.NoisApp
 	homePath, ok := appOpts.Get(flags.FlagHome).(string)
@@ -262,7 +269,8 @@ func (ac appCreator) appExport(
 	}
 
 	loadLatest := height == -1
-	var emptyWasmOpts []wasm.Option
+	var emptyWasmOpts []wasmkeeper.Option
+	encCfg := app.MakeEncodingConfig()
 	noisApp = app.NewNoisApp(
 		logger,
 		db,
@@ -271,8 +279,7 @@ func (ac appCreator) appExport(
 		map[int64]bool{},
 		homePath,
 		cast.ToUint(appOpts.Get(server.FlagInvCheckPeriod)),
-		ac.encCfg,
-		app.GetWasmEnabledProposals(),
+		encCfg,
 		appOpts,
 		emptyWasmOpts,
 	)
