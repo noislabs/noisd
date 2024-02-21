@@ -37,7 +37,6 @@ func NewApp(home string) *app.NoisApp {
 		home,
 		5, // invariant check periods,
 		encCdc,
-		app.GetWasmEnabledProposals(),
 		EmptyOptions{},
 		nil, // empty wasm options
 	)
