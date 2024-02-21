@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/CosmWasm/wasmd v0.45.0
-	github.com/CosmWasm/wasmvm v1.5.0 // indirect
+	github.com/CosmWasm/wasmvm v1.5.2 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
 	github.com/cometbft/cometbft v0.37.4
 	github.com/cosmos/cosmos-proto v1.0.0-beta.4 // indirect
@@ -28,7 +28,7 @@ require (
 	cosmossdk.io/api v0.3.1 // indirect
 	cosmossdk.io/errors v1.0.1
 	github.com/cometbft/cometbft-db v0.8.0
-	github.com/cosmos/ibc-go/v7 v7.3.1
+	github.com/cosmos/ibc-go/v7 v7.3.2
 	github.com/prometheus/client_golang v1.17.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20231212172506-995d672761c0
 )
@@ -191,4 +191,6 @@ replace (
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.8.1
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
+	// remove in v0.50
+	golang.org/x/exp => golang.org/x/exp v0.0.0-20230711153332-06a737ee72cb
 )
