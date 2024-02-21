@@ -1,10 +1,10 @@
 syntax = "proto3";
 package nois.allocation.v1;
 
-import "gogoproto/gogo.proto";
-import "nois/allocation/v1/params.proto";
-import "google/api/annotations.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "nois/allocation/v1/params.proto";
 
 option go_package = "github.com/noislabs/noisd/x/allocation/types";
 
@@ -14,24 +14,27 @@ message QueryParamsRequest {}
 // QueryParamsResponse is the response type for the Query/Params RPC method.
 message QueryParamsResponse {
   // params defines the parameters of the module.
-  Params params = 1 [ (gogoproto.nullable) = false ];
+  Params params = 1 [(gogoproto.nullable) = false];
 }
 
 // Query defines the gRPC querier service.
 service Query {
+  // Params returns the module params.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/nois/alocation/v1/params";
   }
-  rpc ClaimableRewards(QueryClaimableRewardsRequest)
-      returns (QueryClaimableRewardsResponse) {
+  // ClaimableRewards returns how many rewards accumulated by an address.
+  rpc ClaimableRewards(QueryClaimableRewardsRequest) returns (QueryClaimableRewardsResponse) {
     option (google.api.http).get = "/nois/alocation/v1/claimable_rewards";
   }
 }
 
+// QueryClaimableRewardsRequest claimable rewards request.
 message QueryClaimableRewardsRequest {
-  string address = 1 [ (gogoproto.moretags) = "yaml:\"address\"" ];
+  string address = 1 [(gogoproto.moretags) = "yaml:\"address\""];
 }
 
+// QueryClaimableRewardsResponse claimable rewards response.
 message QueryClaimableRewardsResponse {
   repeated cosmos.base.v1beta1.Coin coins = 1 [
     (gogoproto.moretags) = "yaml:\"coins\"",

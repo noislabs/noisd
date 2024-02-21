@@ -1,11 +1,13 @@
 syntax = "proto3";
 
 package nois.allocation.v1;
-import "gogoproto/gogo.proto";
+
 import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
 
 option go_package = "github.com/noislabs/noisd/x/allocation/types";
 
+// DistributionProportions defines the allocation distribution structure.
 message DistributionProportions {
   string developer_rewards = 1 [
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
@@ -23,8 +25,10 @@ message DistributionProportions {
     (gogoproto.nullable) = false
   ];
 }
+
+// WeightedAddress defines the weight given to an address.
 message WeightedAddress {
-  string address = 1 [ (gogoproto.moretags) = "yaml:\"address\"" ];
+  string address = 1 [(gogoproto.moretags) = "yaml:\"address\""];
   string weight = 2 [
     (gogoproto.moretags) = "yaml:\"weight\"",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
@@ -32,10 +36,10 @@ message WeightedAddress {
   ];
 }
 
+// Params module params.
 message Params {
   // distribution_proportions defines the proportion of the minted denom
-  DistributionProportions distribution_proportions = 1
-      [ (gogoproto.nullable) = false ];
+  DistributionProportions distribution_proportions = 1 [(gogoproto.nullable) = false];
 
   // address to receive developer rewards
   repeated WeightedAddress weighted_developer_rewards_receivers = 2 [
@@ -44,6 +48,5 @@ message Params {
   ];
 
   // address to receive randomness rewards
-  string randomness_rewards_receiver = 3
-      [ (gogoproto.moretags) = "yaml:\"randomness_rewards_receiver\"" ];
+  string randomness_rewards_receiver = 3 [(gogoproto.moretags) = "yaml:\"randomness_rewards_receiver\""];
 }
