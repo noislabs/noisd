@@ -10,7 +10,7 @@ updates:
     - dependency-name: "github.com/informalsystems/tendermint"
       update-types: ["version-update:semver-major", "version-update:semver-minor"]
   ignore:
-    - dependency-name: "github.com/tendermint/tendermint"
+    - dependency-name: "github.com/cometbft/cometbft"
       update-types: ["version-update:semver-major", "version-update:semver-minor"]
   ignore:
     - dependency-name: "github.com/cosmos/cosmos-sdk"
