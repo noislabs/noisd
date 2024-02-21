@@ -3,9 +3,10 @@ package keeper
 import (
 	"fmt"
 
-	"github.com/tendermint/tendermint/libs/log"
+	"github.com/cometbft/cometbft/libs/log"
 
 	"github.com/cosmos/cosmos-sdk/codec"
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
@@ -14,7 +15,7 @@ import (
 
 type Keeper struct {
 	cdc      codec.BinaryCodec
-	storeKey sdk.StoreKey
+	storeKey storetypes.StoreKey
 
 	accountKeeper types.AccountKeeper
 	bankKeeper    types.BankKeeper
@@ -27,7 +28,7 @@ type Keeper struct {
 // NewKeeper creates a new allocation Keeper instance.
 func NewKeeper(
 	cdc codec.BinaryCodec,
-	storeKey sdk.StoreKey,
+	storeKey storetypes.StoreKey,
 	accountKeeper types.AccountKeeper, bankKeeper types.BankKeeper, stakingKeeper types.StakingKeeper, distrKeeper types.DistrKeeper,
 	ps paramtypes.Subspace,
 ) Keeper {
@@ -144,7 +145,7 @@ func (k Keeper) DistributeValidatorRewards(ctx sdk.Context, rewards sdk.Coin) er
 // GetProportions gets the balance of the `MintedDenom` from minted coins
 // and returns coins according to the `AllocationRatio`
 func (k Keeper) GetProportions(ctx sdk.Context, mintedCoin sdk.Coin, ratio sdk.Dec) sdk.Coin {
-	return sdk.NewCoin(mintedCoin.Denom, mintedCoin.Amount.ToDec().Mul(ratio).TruncateInt())
+	return sdk.NewCoin(mintedCoin.Denom, sdk.NewDecFromInt(mintedCoin.Amount).Mul(ratio).TruncateInt())
 }
 
 // Logger returns a module-specific logger.

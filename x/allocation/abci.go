@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"time"
 
+	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/noislabs/noisd/x/allocation/keeper"
 	"github.com/noislabs/noisd/x/allocation/types"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 func BeginBlocker(ctx sdk.Context, keeper keeper.Keeper, _ abci.RequestBeginBlock) {
