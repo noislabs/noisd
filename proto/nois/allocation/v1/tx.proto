@@ -4,6 +4,7 @@ package nois.allocation.v1;
 
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
 option go_package = "github.com/noislabs/noisd/x/allocation/types";
@@ -18,7 +19,7 @@ service Msg {
 // MsgClaimRewards defines the claim rewards message.
 message MsgClaimRewards {
   option (cosmos.msg.v1.signer) = "sender";
-  string sender = 1;
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 // MsgClaimRewardsResponse defines the claim rewards response.
