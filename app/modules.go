@@ -18,6 +18,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
+	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	"github.com/cosmos/cosmos-sdk/x/gov"
 	govclient "github.com/cosmos/cosmos-sdk/x/gov/client"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
@@ -54,7 +55,7 @@ func getGovProposalHandlers() []govclient.ProposalHandler {
 var (
 	ModuleBasics = module.NewBasicManager(
 		auth.AppModuleBasic{},
-		genutil.AppModuleBasic{},
+		genutil.NewAppModuleBasic(genutiltypes.DefaultMessageValidator),
 		bank.AppModuleBasic{},
 		capability.AppModuleBasic{},
 		staking.AppModuleBasic{},
