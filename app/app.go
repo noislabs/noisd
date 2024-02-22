@@ -537,7 +537,7 @@ func NewNoisApp(
 			},
 			keeper:            app.IBCKeeper,
 			WasmConfig:        &wasmConfig,
-			TXCounterStoreKey: keys[wasm.StoreKey],
+			TXCounterStoreKey: keys[wasmtypes.StoreKey],
 			Codec:             app.appCodec,
 			govKeeper:         app.GovKeeper,
 		},
