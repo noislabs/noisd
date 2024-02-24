@@ -94,6 +94,11 @@ else
 	exit 1
 endif
 
+# Show the version that `make build` is using
+.PHONY: version
+version:
+	@echo "$(VERSION)"
+
 all: install
 
 install: check_go_version
