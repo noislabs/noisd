@@ -21,9 +21,11 @@ echo "Setting up validator ..."
 if ! noisd keys show validator_key_1 2>/dev/null; then
   echo "Validator does not yet exist. Creating it ..."
   (
+    # Constant key to get the same validator operator address (noisvaloper1...) every time
+    echo "setup street come illness bargain kitchen current lend critic drop vivid bronze"
     echo "$PASSWORD"
     echo "$PASSWORD"
-  ) | noisd keys add validator_key_1
+  ) | noisd keys add validator_key_1 --recover
 fi
 # hardcode the validator account for this instance
 echo "$PASSWORD" | noisd genesis add-genesis-account validator_key_1 "$START_BALANCE"
