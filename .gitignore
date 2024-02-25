@@ -1,2 +1,5 @@
 bin/
 build/
+
+# MacOS
+.DS_Store
