@@ -105,6 +105,7 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 		tmcli.NewCompletionCmd(rootCmd, true),
 		debug.Cmd(),
 		config.Cmd(),
+		PrepareGenesisCmd(app.DefaultNodeHome, app.ModuleBasics),
 		Bech32Cmd(),
 		pruning.PruningCmd(newApp),
 	)
