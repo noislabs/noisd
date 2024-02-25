@@ -357,6 +357,7 @@ func MainnetGenesisParams() GenesisParams {
 	genParams.StakingParams.UnbondingTime = time.Hour * 24 * 7 * 3 // 21 days
 	genParams.StakingParams.MaxValidators = 45
 	genParams.StakingParams.BondDenom = genParams.NativeCoinMetadatas[0].Base
+	genParams.StakingParams.MinCommissionRate = sdk.MustNewDecFromStr("0.05") // 5 %
 
 	genParams.DistributionParams = distributiontypes.DefaultParams()
 	// according to tokenomics this should be 0
@@ -370,8 +371,9 @@ func MainnetGenesisParams() GenesisParams {
 		genParams.NativeCoinMetadatas[0].Base,
 		sdk.NewInt(1_000_000_000),
 	))
-	genParams.GovParams.Quorum = "0.200000000000000000" // 20%
-	votingPeriod := time.Hour * 24 * 4                  // 4 days
+	genParams.GovParams.MinInitialDepositRatio = "0.200000000000000000" // 20%
+	genParams.GovParams.Quorum = "0.200000000000000000"                 // 20%
+	votingPeriod := time.Hour * 24 * 4                                  // 4 days
 	genParams.GovParams.VotingPeriod = &votingPeriod
 
 	// crisis make this  a high fee
