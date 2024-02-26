@@ -187,13 +187,14 @@ func NewNoisApp(
 	wasmOpts []wasmkeeper.Option,
 	baseAppOptions ...func(*baseapp.BaseApp),
 ) *NoisApp {
-	appCodec, legacyAmino := encodingConfig.Codec, encodingConfig.Amino
+	appCodec, cdc := encodingConfig.Codec, encodingConfig.Amino
 	interfaceRegistry := encodingConfig.InterfaceRegistry
 
 	bApp := baseapp.NewBaseApp(appName, logger, db, encodingConfig.TxConfig.TxDecoder(), baseAppOptions...)
 	bApp.SetCommitMultiStoreTracer(traceStore)
 	bApp.SetVersion(version.Version)
 	bApp.SetInterfaceRegistry(interfaceRegistry)
+	bApp.SetTxEncoder(encodingConfig.TxConfig.TxEncoder())
 
 	keys := sdk.NewKVStoreKeys(
 		KVStoreKeys()...,
@@ -203,7 +204,7 @@ func NewNoisApp(
 
 	app := &NoisApp{
 		BaseApp:           bApp,
-		legacyAmino:       legacyAmino,
+		legacyAmino:       cdc,
 		appCodec:          appCodec,
 		interfaceRegistry: interfaceRegistry,
 		keys:              keys,
@@ -213,7 +214,7 @@ func NewNoisApp(
 
 	app.ParamsKeeper = initParamsKeeper(
 		appCodec,
-		legacyAmino,
+		cdc,
 		keys[paramstypes.StoreKey],
 		tKeys[paramstypes.TStoreKey])
 
@@ -286,7 +287,7 @@ func NewNoisApp(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String())
 
 	app.SlashingKeeper = slashingkeeper.NewKeeper(
-		appCodec, legacyAmino, keys[slashingtypes.StoreKey], app.StakingKeeper, authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		appCodec, cdc, keys[slashingtypes.StoreKey], app.StakingKeeper, authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 	app.CrisisKeeper = *crisiskeeper.NewKeeper(
 		appCodec,
