@@ -6,7 +6,7 @@
 #   show version:       docker run --rm noislabs/noisd:manual
 #   libwasmvm version:  docker run --rm noislabs/noisd:manual noisd query wasm libwasmvm-version
 #   shell:              docker run --rm -it noislabs/noisd:manual sh
-FROM golang:1.20.2-alpine3.17 AS go-builder
+FROM golang:1.21.5-alpine3.17 AS go-builder
 
 # this comes from standard alpine nightly file
 #  https://github.com/rust-lang/docker-rust-nightly/blob/master/alpine3.12/Dockerfile
@@ -23,11 +23,11 @@ RUN APK_ARCH="$(apk --print-arch)"; \
   echo "Detected architecture: $APK_ARCH"; \
   case "$APK_ARCH" in \
     aarch64) \
-      wget -O /lib/libwasmvm_muslc.a https://github.com/CosmWasm/wasmvm/releases/download/v1.2.6/libwasmvm_muslc.aarch64.a \
-        && sha256sum /lib/libwasmvm_muslc.a | grep 1014ebcce48bd7b019f66798ec8dbb42b383f324038296c64de35bdbf5f28243 ;; \
+      wget -O /lib/libwasmvm_muslc.a https://github.com/CosmWasm/wasmvm/releases/download/v1.5.2/libwasmvm_muslc.aarch64.a \
+        && sha256sum /lib/libwasmvm_muslc.a | grep e78b224c15964817a3b75a40e59882b4d0e06fd055b39514d61646689cef8c6e ;; \
     x86_64) \
-      wget -O /lib/libwasmvm_muslc.a https://github.com/CosmWasm/wasmvm/releases/download/v1.2.6/libwasmvm_muslc.x86_64.a \
-        && sha256sum /lib/libwasmvm_muslc.a | grep d93b02f34d2da0aa7f20786add8abdca8224334db541f954d28fad64641b9136 ;; \
+      wget -O /lib/libwasmvm_muslc.a https://github.com/CosmWasm/wasmvm/releases/download/v1.5.2/libwasmvm_muslc.x86_64.a \
+        && sha256sum /lib/libwasmvm_muslc.a | grep e660a38efb2930b34ee6f6b0bb12730adccb040b6ab701b8f82f34453a426ae7 ;; \
   esac;
 
 WORKDIR /code

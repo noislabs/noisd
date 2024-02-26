@@ -18,21 +18,23 @@ noisd prepare-genesis "$CHAIN_ID"
 cd "${HOME}/.noisd"
 
 echo "Setting up validator ..."
-if ! noisd keys show validator 2>/dev/null; then
+if ! noisd keys show validator_key_1 2>/dev/null; then
   echo "Validator does not yet exist. Creating it ..."
   (
+    # Constant key to get the same validator operator address (noisvaloper1...) every time
+    echo "setup street come illness bargain kitchen current lend critic drop vivid bronze"
     echo "$PASSWORD"
     echo "$PASSWORD"
-  ) | noisd keys add validator
+  ) | noisd keys add validator_key_1 --recover
 fi
 # hardcode the validator account for this instance
-echo "$PASSWORD" | noisd add-genesis-account validator "$START_BALANCE"
+echo "$PASSWORD" | noisd genesis add-genesis-account validator_key_1 "$START_BALANCE"
 
 echo "Setting up accounts ..."
 # (optionally) add a few more genesis accounts
 for addr in "$@"; do
   echo "$addr"
-  noisd add-genesis-account "$addr" "$START_BALANCE"
+  noisd genesis add-genesis-account "$addr" "$START_BALANCE"
 done
 
 echo "Creating genesis tx ..."
@@ -41,12 +43,12 @@ SELF_DELEGATION="3000000$TOKEN" # 3 NOIS (leads to a voting power of 3)
   echo "$PASSWORD"
   echo "$PASSWORD"
   echo "$PASSWORD"
-) | noisd gentx validator "$SELF_DELEGATION" --offline --chain-id "$CHAIN_ID" --moniker="$MONIKER"
+) | noisd genesis gentx validator_key_1 "$SELF_DELEGATION" --offline --account-number 0 --sequence 0 --chain-id "$CHAIN_ID" --moniker="$MONIKER"
 
 ls -lA config/gentx/
 
 echo "Collecting genesis tx ..."
-noisd collect-gentxs
+noisd genesis collect-gentxs
 
 # so weird, but found I needed the -M flag after lots of debugging odd error messages
 # happening when redirecting stdout

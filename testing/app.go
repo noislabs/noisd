@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"time"
 
+	dbm "github.com/cometbft/cometbft-db"
+	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cosmos/cosmos-sdk/std"
-	abci "github.com/tendermint/tendermint/abci/types"
-	dbm "github.com/tendermint/tm-db"
 
+	"github.com/cometbft/cometbft/libs/log"
+	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	tmtypes "github.com/cometbft/cometbft/types"
 	app "github.com/noislabs/noisd/app"
 	appparams "github.com/noislabs/noisd/app/params"
-	"github.com/tendermint/tendermint/libs/log"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	tmtypes "github.com/tendermint/tendermint/types"
 )
 
 type EmptyOptions struct{}
@@ -37,7 +37,6 @@ func NewApp(home string) *app.NoisApp {
 		home,
 		5, // invariant check periods,
 		encCdc,
-		app.GetWasmEnabledProposals(),
 		EmptyOptions{},
 		nil, // empty wasm options
 	)
@@ -45,8 +44,8 @@ func NewApp(home string) *app.NoisApp {
 	return noisApp
 }
 
-var defaultConsensusParams = &abci.ConsensusParams{
-	Block: &abci.BlockParams{
+var defaultConsensusParams = &tmproto.ConsensusParams{
+	Block: &tmproto.BlockParams{
 		MaxBytes: 200000,
 		MaxGas:   2000000,
 	},
